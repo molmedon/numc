@@ -28,9 +28,6 @@ Flux::Flux(std::string filename) : spline(ROOT::Math::Interpolator(0, ROOT::Math
     // lets get the number of elements in the flux file
     int nlines = 0; influx >> nlines;
 
-    // a map between energy and flux
-    std::map<double, double> _flux_map;
-
     // variables to store energy and flux into
     double _energy = 0; double _flux = 0;
     for (int n = 0; n < nlines; n++) {
@@ -40,25 +37,22 @@ Flux::Flux(std::string filename) : spline(ROOT::Math::Interpolator(0, ROOT::Math
 
         // convert GeV to eV and E2dN... -> EdN...
         // this is straight from IceMC - verify? RP
-        _flux_map[_energy] = _flux + 9. - _energy;
+        this->flux[_energy] = _flux + 9. - _energy;
 
     }
-
-    // save the flux map into the class
-    this->flux = _flux_map;
 
     // maps are guaranteed to be presorted
     //so the min and max energy is just the first and last element
     this->min_energy = this->flux.begin()->first;
     this->max_energy = this->flux.rbegin()->first;
 
-    // and we find the maximum value in the map
+    // and we find the maximum and minimum value in the map
     this->min_flux = (*std::min_element(this->flux.begin(),
-                                        this->flux.end())).second;
+                                        this->flux.end())).first;
     this->max_flux = (*std::max_element(this->flux.begin(),
                                        this->flux.end())).second;
 
-    // we now build a cubic spline interpolant using ALGLIB
+    // we now build a cubic spline interpolant using ROOT
     // first, we need X and Y arrrays
     // get the keys of the flux data file that has been initialized
     std::vector<double> x;
