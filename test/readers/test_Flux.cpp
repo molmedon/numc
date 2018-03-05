@@ -6,6 +6,8 @@
 
 using namespace anita::readers;
 
+TEST_SUITE_BEGIN("flux");
+
 TEST_CASE("Load ALL flux data files and evaluate first energy point using spline") {
     CHECK(Flux(std::string("ahlers")).getFlux(16) == doctest::Approx(-13.98404));
     CHECK(Flux(std::string("allard")).getFlux(16) == doctest::Approx(-16.08282));
@@ -32,3 +34,5 @@ TEST_CASE("Load ALL flux data files and evaluate first energy point using spline
     CHECK(Flux(std::string("yuksel_qso")).getFlux(16) == doctest::Approx(-16.70348));
     CHECK(Flux(std::string("yuksel_sfh")).getFlux(16) == doctest::Approx(-16.94323));
 }
+
+TEST_SUITE_END();

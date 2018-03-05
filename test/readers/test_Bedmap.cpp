@@ -1,6 +1,7 @@
 #include <readers/Bedmap.hpp>
 #include <doctest.h>
 
+TEST_SUITE_BEGIN("bedmap");
 
 TEST_CASE("BEDMAP") {
 
@@ -32,3 +33,5 @@ TEST_CASE("BEDMAP") {
         CHECK(bedmap.getRockDepth(theta, phi) == -9999);
     }
 }
+
+TEST_SUITE_END();
