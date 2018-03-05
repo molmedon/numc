@@ -44,7 +44,6 @@ CFLAGS += -DDATA_DIR=\"$(DATA_DIR)\"
 
 # linker flags
 LDFLAGS = -Llib -L/usr/lib/root
-LDFLAGS += -Llib/alglib/obj/ # alglib
 
 # libs for ROOT
 ROOTLIBS = -lHist -lCore -lTree -lRIO -lTreePlayer -lMathCore -lMathMore
@@ -93,4 +92,4 @@ data/bedmap2_bin.zip:
 
 # delete the object and binary for clean
 clean:
-	rm -rf $(OBJ) $(TEST_OBJ) $(BIN)
+	rm -rf $(OBJ) $(TEST_OBJ) $(BIN) obj/lib/*.o
