@@ -4,6 +4,7 @@
 #include <functional>
 
 #include <NuMC.hpp>
+#include <Random.hpp>
 #include <Vector3.hpp>
 #include <Continent.hpp>
 #include <CrossSections.hpp>
@@ -68,7 +69,15 @@ namespace anita {
         // get the cross section as a function of energy
         double getCrossSection(const Current current) const override;
 
+        // generate a random neutrino (e, mu, or t) with a given E
+        // in log10 eV units
+        static Neutrino generateRandomNeutrino(const double E);
+
+        // construct a particular flavor
         Neutrino(double E, Flavor flv) : Particle(E), flavor(flv) {};
+
+        // a constructor with only energy random creates a neutrino flavor
+        Neutrino(double E) : Particle(E), flavor(static_cast<Flavor>(uniformInt(0, 2))) {};
 
     private:
 
@@ -146,21 +155,5 @@ namespace anita {
     private:
 
     };
-
-
-    // generate a random neutrino (e, mu, or t) with a given E
-    // in log10 eV units
-    Neutrino generateRandomNeutrino(double E);
-
-    // generate a random neutrino energy according to a spectrum
-    // or, if spectrum == EnergySpectrum::Fixed, then just return energy
-    // double getNeutrinoEnergy(const EnergySpectrum spectrum, const double energy);
-
-    // sample random energies from spectrum
-    // double getNeutrinoEnergy(std::function<double (double)> flux);
-
-    // get the Bjorken y-factor at a given energy
-    // in units of log10 eV
-    // double getYFactor(double energy);
 
 }

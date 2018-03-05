@@ -65,7 +65,7 @@ double Neutrino::getCrossSection(const Current current) const {
 
 // generate a random neutrino (e, mu, or t) with a given E
 // in log10 eV units
-Neutrino generateRandomNeutrino(double energy) {
+Neutrino Neutrino::generateRandomNeutrino(const double energy) {
 
     // generate a random random associated
     Flavor randomFlavor = static_cast<Flavor>(uniformInt(0, 2)); // for three neutrino flavors
