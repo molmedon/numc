@@ -1,6 +1,15 @@
+# ignore editor backup files files
+*~
+#*#
+#*
+*#
+
 # Specific directories
 build/*
 obj/*
+
+# ignore bedmap files
+data/bedmap*
 
 # Prerequisites
 *.d
