@@ -28,3 +28,11 @@ double Continent::getSurfaceElevation(const double theta, const double phi) cons
 
     return this->bedmap.getSurfaceElevation(theta, phi);
 }
+
+std::pair<double, Material> Continent::getDensityAndMaterial(const SphericalCoordinate location) const {
+
+    // TODO
+}
+std::pair<double, Material> Continent::getDensityAndMaterial(const double theta, const double phi, const double radius) const {
+    // TODO
+}
