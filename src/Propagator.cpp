@@ -1,6 +1,9 @@
+#include <map>
+#include <vector>
 #include <NuMC.hpp>
 #include <Random.hpp>
 #include <Particle.hpp>
+#include <Neutrino.hpp>
 #include <Propagator.hpp>
 
 #include <math.h>
@@ -9,14 +12,11 @@ using namespace anita;
 
 // This function implements the complete propagation of a fixed number of particles
 // drawn from a particular energy distribution
-InteractionList Propagator::propagateParticles(const int particlesToSimulate) const {
+std::map<int, InteractionList> Propagator::propagateParticles(const int particlesToSimulate) const {
 
 
     // create a vector to store all valid interactions
-    InteractionList interactions;
-
-    // and we reserve the correct number of events
-    interactions.reserve(static_cast<size_t>(particlesToSimulate));
+    std::map<int, InteractionList> interactionMap;
 
     // iterate over the number of desired particles
     for (int n = 0; n < particlesToSimulate; n++) {
@@ -29,83 +29,90 @@ InteractionList Propagator::propagateParticles(const int particlesToSimulate) co
         Neutrino neutrino = Neutrino::generateRandomNeutrino(energy);
 
         // // propagate the particle through the Earth and save it to the list
-        // interactions.push_back(this->propagate(neutrino));
+        interactionMap[n] = this->propagate(neutrino);
 
     }
 
     // and we are done
-    return interactions;
+    return interactionMap;
 
 }
 
 
-Interaction Propagator::propagate(Neutrino particle) const {
+InteractionList Propagator::propagate(Neutrino particle) const {
     // this function takes a Neutrino object and continually generates
     // random starting locations and directions and propagates the
     // particle through the Earth until the neutrino interacts
     // in such a way that it would generate a detectable pulse
 
-    // int ntrials = 1; // the number of particle attempts before a successful interaction
-    // while (ntrials) {
+    int ntrials = 1; // the number of particle attempts before a successful interaction
+    while (ntrials) {
 
-    //     // get random location on the surface of the sphere
-    //     SphericalCoordinate surface = this->continent.getRandomSurfacePoint();
+        // initialize a new vector to store interactions of this particle
+        InteractionList interactions;
 
-    //     // and a direction at the surface at this point    //     SphericalCoordinate direction = this->continent.getRandomSurfaceDirection(surface);
+        // get random location on the surface of the sphere
+        // TODO: VERIFY
+        SphericalCoordinate surface = this->continent.getRandomSurfacePoint();
 
-    //     // compute chord length of travel through Earth
-    //     double chord_length = 2*this->continent.getSurfaceElevation(surface.theta, surface.phi)*cos(direction.theta);
+        // and a direction at the surface at this point
+        // TODO: VERIFY
+        SphericalCoordinate direction = this->continent.getRandomSurfaceDirection(surface);
 
-    //     // and we compute the starting location of the particle
-    //     SphericalCoordinate start_loc = SphericalCoordinate(PI - surface.theta,
-    //                                                         surface.phi + PI,
-    //                                                         surface.r); // geoid level
+        // and we compute the starting location of the particle on the surface of the Earth
+        // TODO: VERIFY
+        SphericalCoordinate start_point = SphericalCoordinate(PI - surface.theta,
+                                                              surface.phi + PI,
+                                                              surface.r); // geoid level
 
-    //     // we create a new Interaction to store the initial state of the propagation
-    //     Interaction interaction = Interaction(0, particle, surface, direction,
-    //                                           0, Current::Charged, chord_length, 0, 0);
+        // compute chord length of travel through Earth
+        double chord_length = 2*this->continent.getSurfaceElevation(surface.theta, surface.phi)*cos(direction.theta);
 
-    //     // we step through the Earth
-    //     for (double distance = 0. ; distance < chord_length; )  {
+        // we create a new Interaction to store the initial state of the propagation
+        Interaction interaction = Interaction(0, particle, surface, direction,
+                                              0, Current::Charged, chord_length, 0, 0);
 
-    //         // get a neutrino to check the flavor
-    //         Neutrino neutrino = static_cast<Neutrino&>(interaction.particle);
+        // we step through the Earth
+        for (double distance = 0. ; distance < chord_length; )  {
 
-    //         // we get the local density and material of the earth at the current location
-    //         auto [density, material] = this->continent.getDensityAndMaterial(interaction.location);
+            // we get the local density and material of the earth at the current location
+            auto [density, material] = this->continent.getDensityAndMaterial(interaction.location);
 
-    //         // get the interaction length at this density
-    //         double interaction_length = interaction.particle.getInteractionLength(density, material);
+            // get the interaction length at this density
+            auto [interaction_length, current] = interaction.particle.getInteractionLength(density);
 
-    //         // TODO(Decide if an interaction has occurred)
+            // TODO: check for interaction and get current
+            bool interacted = true; // replace this with whether we have interacted
 
-    //         // get a Y-factor
-    //         double y = interaction.particle.getYFactor();
+            // we interact at this step
+            if (interacted) {
 
-    //         // electron neutrino
-    //         if (neutrino.flavor == Flavor::Electron) {
-    //         }
+                // get the particle resulting from this interaction or decay
+                Particle new_particle = particle.getInteractionProducts(current);
 
-    //         // muon neutrino
-    //         else if (neutrino.flavor == Flavor::Muon) {
-    //         }
+                // TODO: change any relevant fields in the interaction object
 
-    //         // tau neutrino
-    //         else if (neutrino.flavor == Flavor::Tau) {
-    //         }
+                // and add the current interaction site to the list
+                interactions.push_back(interaction);
 
-    //         // tau lepton - right now we ignore electrons and muons
-    //         else if (interaction.particle.isLepton()) {
-    //         }
+            }
+            else { // we did not interact at this step
 
-    //         // update the interaction with the new position and info
-    //         // interaction = Interaction(ntrials++, particle, location, direction,
-    //         //                           depth, current, length, interaction.num_NC, interaction.num_CC);
+            // update the interaction with the new position and info
+            // interaction = Interaction(ntrials++, particle, location, direction,
+            //                           depth, current, length, interaction.num_NC, interaction.num_CC);
+            }
+
+            // and increment the distance somehow?? whether we interact or not
+            // distance +=
 
 
-    //     } // END: while interaction.depth
+        } // END: while interaction.depth
 
-    // } // END: while (ntrials)
+        // if we get here, our particle did not make it to the surface
+        ntrials++; // Peter has ntrials += 2. Why?
+
+    } // END: while (ntrials)
 
 }
 

@@ -1,8 +1,10 @@
 #pragma once
 
+#include <map>
 #include <vector>
 #include <NuMC.hpp>
 #include <Particle.hpp>
+#include <Neutrino.hpp>
 #include <Continent.hpp>
 #include <readers/Table.hpp>
 #include <readers/Flux.hpp>
@@ -78,11 +80,14 @@ namespace anita {
         double getRandomNeutrinoEnergy() const;
 
         // To ensure thread-safety, propagate() must be completely pure (in the functional sense)
-        // Called via Propagator->propagate(100) during thread creation
-        InteractionList propagateParticles(const int particlesToSimulate) const;
+        std::map<int, InteractionList> propagateParticles(const int particlesToSimulate) const;
 
-        // This propagates a single particle through the Earth
-        Interaction propagate(Neutrino particle) const;
+        // This propagates a single particle through the Earth, returning a list of all interactions
+        // that the particle underwent during propagation
+        InteractionList propagate(Neutrino particle) const;
+
+        // Generate random decay products (according to y-distributions)
+
 
         // construct a new propagator, loading all necessary data tables and cross sections
         // using a pre-constructed continent

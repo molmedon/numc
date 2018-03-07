@@ -6,11 +6,8 @@
 
 using namespace anita;
 
-// default cross section model  for neutrino's
-CrossSectionModel Neutrino::cross_section_model = CrossSectionModel::ConnollyMiddle;
-
 // check that particle energy is reasonable in our units
-Particle::Particle(double E) : energy(E) {
+Particle::Particle(const double E) : energy(E) {
 
     // in log10(eV) units, a larger than necessary range
     // is 6-24 i.e. 1 MeV to YeV
@@ -23,72 +20,32 @@ Particle::Particle(double E) : energy(E) {
     }
 }
 
-double Particle::getInteractionLength(const double density, const Current current) const {
-    return 1.0/(density*this->getCrossSection(current));
-}
+std::pair<double, Current> Particle::getInteractionLength(const double density) const {
 
+    // get charged current interaction length
+    double CClength = 1.0/(density*this->getCrossSection(Current::Charged));
+    double NClength = 1.0/(density*this->getCrossSection(Current::Neutral));
 
-double Neutrino::getYFactor(const Current current) const {
-
-    // we use the pre-loaded final state table to draw a random y-factor
-    // as the data files have pre-sampled randomness in them
-    if (current == Current::Charged) {
-        this->chargedTable().evaluate(this->energy);
-    }
-    else if (current == Current::Neutral) {
-        this->neutralTable().evaluate(this->energy);
+    if (CClength > NClength) {
+        return std::pair(NClength, Current::Neutral);
     }
     else {
-        std::cerr << "Unknown current in getYFactor" << std::endl;
-        throw std::exception();
-    }
-
-    // to silence the compiler
-    return -1;
-}
-
-
-
-double Neutrino::getCrossSection(const Current current) const {
-
-    if (current == Current::Neutral) {
-        return getChargedCurrentCrossSection(this->energy, this->cross_section_model);
-    }
-    else if (current == Current::Charged) {
-        return getNeutralCurrentCrossSection(this->energy, this->cross_section_model);
-    }
-    else {
-        std::cerr << "Unknown current interaction. Quitting..." << std::endl;
-        throw std::exception();
+        return std::pair(NClength, Current::Charged);
     }
 }
 
-// generate a random neutrino (e, mu, or t) with a given E
-// in log10 eV units
-Neutrino Neutrino::generateRandomNeutrino(const double energy) {
 
-    // generate a random random associated
-    Flavor randomFlavor = static_cast<Flavor>(uniformInt(0, 2)); // for three neutrino flavors
+double Particle::getYFactor(const Current current) const {
 
-    // switch on the the random flavor
-    switch (randomFlavor) {
+    return 0.2;
+}
 
-        // we generate an electron neutrino
-    case Flavor::Electron:
-        return ElectronNeutrino(energy);
+Particle Particle::getInteractionProducts(const Current current) const {
 
-        // we generate a muon neutrino
-    case Flavor::Muon:
-        return MuonNeutrino(energy);
+    return Particle(0);
+}
 
-        // we generate a tau neutrino
-    case Flavor::Tau:
-        return TauNeutrino(energy);
+double Particle::getCrossSection(const Current current) const {
 
-        // something is wrong
-    default:
-        std::cerr << "Generated unknown Flavor in generateRandomNeutrino. Something is wrong..."
-                  << std::endl;
-        throw std::exception();
-    }
+    return 0;
 }
