@@ -74,46 +74,51 @@ $(function() {
 <div class="title">anita::Interaction Struct Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
+
+<p>A class representing the interaction or decay of a particle at some location.  
+ <a href="structanita_1_1Interaction.html#details">More...</a></p>
+
+<p><code>#include &lt;<a class="el" href="Propagator_8hpp_source.html">Propagator.hpp</a>&gt;</code></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:af4b0c6011132b1c67004e7630201919b"><td class="memItemLeft" align="right" valign="top"><a id="af4b0c6011132b1c67004e7630201919b"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><b>Interaction</b> (int n, <a class="el" href="classanita_1_1Particle.html">Particle</a> &amp;p, <a class="el" href="structanita_1_1SphericalCoordinate.html">SphericalCoordinate</a> &amp;loc, <a class="el" href="structanita_1_1SphericalCoordinate.html">SphericalCoordinate</a> &amp;vec, double d, Current c, double L, int nc, int cc)</td></tr>
-<tr class="separator:af4b0c6011132b1c67004e7630201919b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6fc7e58df4261a0888ed1a3dfb3c36f5"><td class="memItemLeft" align="right" valign="top"><a id="a6fc7e58df4261a0888ed1a3dfb3c36f5"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structanita_1_1Interaction.html#a6fc7e58df4261a0888ed1a3dfb3c36f5">Interaction</a> (int n, <a class="el" href="classanita_1_1Particle.html">Particle</a> &amp;p, <a class="el" href="structanita_1_1SphericalCoordinate.html">SphericalCoordinate</a> &amp;loc, <a class="el" href="structanita_1_1SphericalCoordinate.html">SphericalCoordinate</a> &amp;vec, Current c, double L)</td></tr>
+<tr class="memdesc:a6fc7e58df4261a0888ed1a3dfb3c36f5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Construct an interaction from pre-initialized member objects. <br /></td></tr>
+<tr class="separator:a6fc7e58df4261a0888ed1a3dfb3c36f5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
 <tr class="memitem:a29d66384747cb92194f08e6486452914"><td class="memItemLeft" align="right" valign="top"><a id="a29d66384747cb92194f08e6486452914"></a>
-int&#160;</td><td class="memItemRight" valign="bottom"><b>trials</b></td></tr>
+int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structanita_1_1Interaction.html#a29d66384747cb92194f08e6486452914">trials</a></td></tr>
+<tr class="memdesc:a29d66384747cb92194f08e6486452914"><td class="mdescLeft">&#160;</td><td class="mdescRight">The number of random neutrino trials before one successfully made it through the Earth. <br /></td></tr>
 <tr class="separator:a29d66384747cb92194f08e6486452914"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a160872b64756074e2866221c69d25f86"><td class="memItemLeft" align="right" valign="top"><a id="a160872b64756074e2866221c69d25f86"></a>
-<a class="el" href="classanita_1_1Particle.html">Particle</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>particle</b></td></tr>
+<a class="el" href="classanita_1_1Particle.html">Particle</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structanita_1_1Interaction.html#a160872b64756074e2866221c69d25f86">particle</a></td></tr>
+<tr class="memdesc:a160872b64756074e2866221c69d25f86"><td class="mdescLeft">&#160;</td><td class="mdescRight">The particle that interacted at this interaction vertex. <br /></td></tr>
 <tr class="separator:a160872b64756074e2866221c69d25f86"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab27dcd7b555a77d30ac3f7e2c213ac64"><td class="memItemLeft" align="right" valign="top"><a id="ab27dcd7b555a77d30ac3f7e2c213ac64"></a>
-<a class="el" href="structanita_1_1SphericalCoordinate.html">SphericalCoordinate</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>location</b></td></tr>
+<a class="el" href="structanita_1_1SphericalCoordinate.html">SphericalCoordinate</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structanita_1_1Interaction.html#ab27dcd7b555a77d30ac3f7e2c213ac64">location</a></td></tr>
+<tr class="memdesc:ab27dcd7b555a77d30ac3f7e2c213ac64"><td class="mdescLeft">&#160;</td><td class="mdescRight">The location of particle interaction w.r.t the center of the Earth. <br /></td></tr>
 <tr class="separator:ab27dcd7b555a77d30ac3f7e2c213ac64"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:abca3294fc232d593253b2caad6bf447a"><td class="memItemLeft" align="right" valign="top"><a id="abca3294fc232d593253b2caad6bf447a"></a>
-<a class="el" href="structanita_1_1SphericalCoordinate.html">SphericalCoordinate</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>direction</b></td></tr>
+<a class="el" href="structanita_1_1SphericalCoordinate.html">SphericalCoordinate</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structanita_1_1Interaction.html#abca3294fc232d593253b2caad6bf447a">direction</a></td></tr>
+<tr class="memdesc:abca3294fc232d593253b2caad6bf447a"><td class="mdescLeft">&#160;</td><td class="mdescRight">The direction of propagation of the particle at the interaction vertex. <br /></td></tr>
 <tr class="separator:abca3294fc232d593253b2caad6bf447a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a997ce640e2e91e6779882042f4000fa9"><td class="memItemLeft" align="right" valign="top"><a id="a997ce640e2e91e6779882042f4000fa9"></a>
-double&#160;</td><td class="memItemRight" valign="bottom"><b>depth</b></td></tr>
-<tr class="separator:a997ce640e2e91e6779882042f4000fa9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a12fb75454d637ec53cc7040a32b94028"><td class="memItemLeft" align="right" valign="top"><a id="a12fb75454d637ec53cc7040a32b94028"></a>
-Current&#160;</td><td class="memItemRight" valign="bottom"><b>current</b></td></tr>
+Current&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structanita_1_1Interaction.html#a12fb75454d637ec53cc7040a32b94028">current</a></td></tr>
+<tr class="memdesc:a12fb75454d637ec53cc7040a32b94028"><td class="mdescLeft">&#160;</td><td class="mdescRight">The interaction type - NeutralCurrent, Charged, Decay?? <br /></td></tr>
 <tr class="separator:a12fb75454d637ec53cc7040a32b94028"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a0e2609e4102eefe1871916f12f0bd59c"><td class="memItemLeft" align="right" valign="top"><a id="a0e2609e4102eefe1871916f12f0bd59c"></a>
-double&#160;</td><td class="memItemRight" valign="bottom"><b>chord_length</b></td></tr>
-<tr class="separator:a0e2609e4102eefe1871916f12f0bd59c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a27ded7083841384ee165e80d7f0eafc5"><td class="memItemLeft" align="right" valign="top"><a id="a27ded7083841384ee165e80d7f0eafc5"></a>
-int&#160;</td><td class="memItemRight" valign="bottom"><b>num_NC</b></td></tr>
-<tr class="separator:a27ded7083841384ee165e80d7f0eafc5"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1eb10ecf93f861c87c0ac03c46c4138a"><td class="memItemLeft" align="right" valign="top"><a id="a1eb10ecf93f861c87c0ac03c46c4138a"></a>
-int&#160;</td><td class="memItemRight" valign="bottom"><b>num_CC</b></td></tr>
-<tr class="separator:a1eb10ecf93f861c87c0ac03c46c4138a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a78ead7c96766705c3cfbbd65bb27fad5"><td class="memItemLeft" align="right" valign="top"><a id="a78ead7c96766705c3cfbbd65bb27fad5"></a>
+double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structanita_1_1Interaction.html#a78ead7c96766705c3cfbbd65bb27fad5">distance</a></td></tr>
+<tr class="memdesc:a78ead7c96766705c3cfbbd65bb27fad5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Total distance travelled so far in propagating this particle. <br /></td></tr>
+<tr class="separator:a78ead7c96766705c3cfbbd65bb27fad5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock">
-<p class="definition">Definition at line <a class="el" href="Propagator_8hpp_source.html#l00018">18</a> of file <a class="el" href="Propagator_8hpp_source.html">Propagator.hpp</a>.</p>
+<div class="textblock"><p>A class representing the interaction or decay of a particle at some location. </p>
+<p>This class contains all the information about a neutrino or lepton interaction that occurs during propagation in rock, ice, air or water. </p>
+
+<p class="definition">Definition at line <a class="el" href="Propagator_8hpp_source.html#l00024">24</a> of file <a class="el" href="Propagator_8hpp_source.html">Propagator.hpp</a>.</p>
 </div><hr/>The documentation for this struct was generated from the following file:<ul>
 <li>include/<a class="el" href="Propagator_8hpp_source.html">Propagator.hpp</a></li>
 </ul>

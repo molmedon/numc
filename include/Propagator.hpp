@@ -14,45 +14,40 @@ namespace anita {
     // This class represents a VALID particle interaction that satisfies
     // the following conditions:
     //     1) Occurs within the specified 'maxdepth' below the surface of the ice
-    //     MORE?
+
+    ///
+    /// \brief A class representing the interaction or decay of a particle at some location.
+    ///
+    /// This class contains all the information about a neutrino or lepton interaction
+    /// that occurs during propagation in rock, ice, air or water.
+    ///
     struct Interaction {
 
-        // number of trials before a successful interaction
-        int trials;
+        int trials; ///< The number of random neutrino trials before one successfully made it through the Earth.
 
-        // the particle in question - could be neutrino or tau lepton
-        // this contains particle energy etc.
-        Particle& particle;
+        Particle& particle; ///< The particle that interacted at this interaction vertex.
 
-        // theta, phi, r of particle interaction location w.r.t center of Earth
-        SphericalCoordinate& location;
+        SphericalCoordinate& location; ///< The location of particle interaction w.r.t the center of the Earth.
 
-        // theta, phi of particle velocity at interaction point (r = 1)
-        SphericalCoordinate& direction;
+        SphericalCoordinate& direction; ///< The direction of propagation of the particle at the interaction vertex.
 
-        // depth (in km) of interaction
-        double depth;
+        Current current; ///< The interaction type - NeutralCurrent, Charged, Decay??
 
-        // interaction type - Current::Charged or Current::Neutral
-        Current current;
+        double distance; ///< Total distance travelled so far in propagating this particle.
 
-        // total chord length of propagation before interaction
-        double chord_length;
-
-        // number of NC interactions before this interaction
-        int num_NC;
-
-        // number of CC interactions before this interaction
-        int num_CC;
-
-        // basic constructor - in order
+        ///
+        /// \brief Construct an interaction from pre-initialized member objects.
+        ///
         Interaction(int n, Particle& p, SphericalCoordinate& loc, SphericalCoordinate& vec,
-                    double d, Current c, double L, int nc, int cc) : trials(n), particle(p), location(loc),
-                                                                     direction(vec), depth(d), current(c),
-                                                                     chord_length(L), num_NC(nc), num_CC(cc) {};
+                    Current c, double L) : trials(n), particle(p), location(loc),
+                                           direction(vec), current(c),
+                                           distance(L) {};
     };
 
-    // a vector of operations - fundamental unit of simulation
+
+    ///
+    /// \brief A vector of Interactions. This is used to store all the interactions that occured for a single source neutrino.
+    ///
     using InteractionList = typename std::vector<Interaction>;
 
 
@@ -143,6 +138,5 @@ namespace anita {
         const double max_energy;
 
     };
-
 
 }
