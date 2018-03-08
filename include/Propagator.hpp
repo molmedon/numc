@@ -55,49 +55,92 @@ namespace anita {
     // a vector of operations - fundamental unit of simulation
     using InteractionList = typename std::vector<Interaction>;
 
-    // This class encapsulates all the necessary information to propagate particles
-    // through the Earth and produce a vector of interaction locations
+
+    ///
+    /// \brief A class to handle the propagation of source neutrinos through the Earth
+    ///
+    /// This class encapsulates all the necessary information for particle propagation, including a Continent
+    /// representation, source neutrino flux model, and min/max energy cuts. Methods provided by this class
+    /// allow for generating a random set of neutrino flavors and propagating them through the Earth, tracking
+    /// a list of all the interactions that each neutrino undergoes during propagation.
+    ///
     class Propagator {
 
     public:
-        // A continent shared across all instances
-        const Continent& continent;
 
-        // the desired source neutrino spectrum/flux - this is a filename in the flux/ directory
-        const std::string flux_model;
-
-        // load the flux data file
-        const readers::Flux flux;
-
-        // a fixed energy of source neutrino energy, otherwise -1
-        const double fixed_energy;
-
-        // the minimum/maximum energy of propagation in log10 eV units
-        const double min_energy;
-        const double max_energy;
-
-        // generate a random energy from the given neutrino flux_model
-        double getRandomNeutrinoEnergy() const;
-
-        // To ensure thread-safety, propagate() must be completely pure (in the functional sense)
+        ///
+        /// \brief Propagate a fixed number of particles through the Earth.
+        ///
+        /// propagateParticles takes as argument the number of neutrinos to simulate; it then loops, randomly generating
+        /// neutrino flavors and energies from the source model. For each generated neutrino, it calls this->propagate()
+        /// to simulate the interactions of that neutrino. The keys of each map correspond to each source neutrino
+        ///
+        /// @param particlesToSimulate The number of neutrinos to propagate through the Earth.
+        ///
         std::map<int, InteractionList> propagateParticles(const int particlesToSimulate) const;
 
-        // This propagates a single particle through the Earth, returning a list of all interactions
-        // that the particle underwent during propagation
+        /// \brief Propagate a single particle through the Earth recording all interactions.
+        ///
+        /// For each input neutrino, we pick a random exit location and random exit direction and back-calculate
+        /// the source location and direction. The source neutrino is then propagated through the Earth, returning
+        /// a vector of all the interactions it undergoes (NC and CC) during its propagation.
+        ///
+        /// @param particle The Neutrino to propagate through the Earth.
+        ///
         InteractionList propagate(Neutrino particle) const;
 
-        // Generate random decay products (according to y-distributions)
-
-
-        // construct a new propagator, loading all necessary data tables and cross sections
-        // using a pre-constructed continent
+        ///
+        /// \brief Construct a new propagator.
+        ///
+        /// Construct a new propagator, loading all necessary data tables and cross sections, but uses
+        /// a pre-constructed Continent object.
+        ///
+        /// @param con An initialized Continent object
+        /// @param fluxname A string corresponding to a filename in data/flux which contains the desired source neutrino model
+        /// @param fixedE If `fluxname`=='fixed', then `fixedE` will contain the energy used for all neutrinos (in log10(eV) units)
+        /// @param maxE The maximum energy above which particles are not generated
+        /// @param minE The minimum energy below which particles are not generated, or propagated
+        ///
         Propagator(const Continent& con, const std::string fluxname, const double fixedE,
                    const double maxE, const double minE) : continent(con), flux_model(fluxname),
                                                            flux(readers::Flux(fluxname)), fixed_energy(fixedE),
                                                            min_energy(minE), max_energy(maxE) {};
-
-
     private:
+
+        ///
+        /// \brief Generates a random neutrino energy from the source flux model of the Propagator.
+        ///
+        double getRandomNeutrinoEnergy() const;
+
+        ///
+        /// \brief An initialized Continent object to provide access to Earth information.
+        ///
+        const Continent& continent;
+
+        ///
+        /// \brief the desired source neutrino spectrum/flux. This must correspond to a filename in data/flux.
+        ///
+        const std::string flux_model;
+
+        ///
+        /// \brief A reader for incident neutrino flux data files.
+        ///
+        const readers::Flux flux;
+
+        ///
+        /// \brief The fixed energy to use for all neutrinos if `flux_model == fixed`.
+        ///
+        const double fixed_energy;
+
+        ///
+        /// \brief The minimum energy below which neutrinos are not propagated.
+        ///
+        const double min_energy;
+
+        ///
+        /// \brief The maximum energy of source neutrino generation or propagation.
+        ///
+        const double max_energy;
 
     };
 
