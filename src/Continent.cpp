@@ -29,10 +29,22 @@ double Continent::getSurfaceElevation(const double theta, const double phi) cons
     return this->bedmap.getSurfaceElevation(theta, phi);
 }
 
-std::pair<double, Material> Continent::getDensityAndMaterial(const SphericalCoordinate location) const {
+std::pair<double, Material> Continent::getDensityAndMaterial(const SphericalCoordinate coord) const {
 
-    // TODO
+    return getDensityAndMaterial(coord.theta, coord.phi, coord.r);
 }
 std::pair<double, Material> Continent::getDensityAndMaterial(const double theta, const double phi, const double radius) const {
     // TODO
+    return std::make_pair(0, Material::Ice);
 }
+
+double Continent::getDensity(const SphericalCoordinate coord) const {
+    return getDensity(coord.theta, coord.phi, coord.r);
+}
+
+double Continent::getDensity(const double theta, const double phi, const double radius) const {
+    // TODO
+    return 0;
+}
+
+

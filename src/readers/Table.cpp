@@ -1,11 +1,8 @@
-// //////////////////////////////////////////////////////////////////////
-// //  table class - loads a table from a file and provides various    //
-// //  reading utilities                                               //
-// //////////////////////////////////////////////////////////////////////
 
 #include <fstream>
 #include <iostream>
 #include <algorithm>
+#include <Utils.hpp>
 #include <Random.hpp>
 #include <readers/Table.hpp>
 
@@ -68,7 +65,7 @@ std::vector<double> YTable::evaluate(const double energy) const {
                                           (this->emax - this->emin)*(this->imax - 1)));
 
     // and clamp to the range of possible indices
-    idx = std::clamp(idx, 0, this->imax - 1);
+    idx = utils::clamp(idx, 0, this->imax - 1);
 
     // memory to store results
     std::vector<double> final;

@@ -98,7 +98,7 @@ namespace anita {
         ///
         Propagator(const Continent& con, const std::string fluxname, const double fixedE,
                    const double maxE, const double minE) : continent(con), flux_model(fluxname),
-                                                           flux(readers::Flux(fluxname)), fixed_energy(fixedE),
+                                                           flux(fluxname), fixed_energy(fixedE),
                                                            min_energy(minE), max_energy(maxE) {};
     private:
 

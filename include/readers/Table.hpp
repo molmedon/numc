@@ -6,7 +6,7 @@
 #include <NuMC.hpp>
 
 
-namespace anita::readers {
+namespace anita { namespace readers {
 
 
     // This class represents a general-purpose text 2D data table; it provides
@@ -73,4 +73,5 @@ namespace anita::readers {
 
     }; // END: class YTable
 
-} // END: namespace anita::readers
+    } // END: namespace readers
+} // END: namespace anita

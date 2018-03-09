@@ -1,0 +1,630 @@
+#include <math.h>
+#include <string>
+#include <iostream>
+
+#include <boost/program_options.hpp>
+#include <boost/spirit/include/qi.hpp>
+#include <boost/random/uniform_int.hpp>
+#include <boost/random/uniform_real.hpp>
+#include <boost/random/mersenne_twister.hpp>
+#include <boost/random/variate_generator.hpp>
+#include <boost/random/normal_distribution.hpp>
+#include <boost/random/poisson_distribution.hpp>
+
+#include <emission.hpp>
+#include <ray.hpp>
+
+// define global RNG
+boost::mt19937 gen;
+
+using namespace std;
+
+// This function parses the command-line arguments and runs the
+// appropriate simulation code
+int main(int argc, char** argv) {
+
+    // build command-line options
+    namespace po = boost::program_options;
+
+    // declare the supported options
+    po::options_description desc("Generate radio emission patterns of a given set of incident neutrinos");
+    desc.add_options()
+        ("help", "Print help messages")
+        ("numrays", po::value<int>()->required(), "Number of rays")
+        ("numevents", po::value<int>()->required(), "Number of incident neutrinos")
+        ("energy", po::value<double>()->required(), "Incident energy of neutrino or 0 for ESS")
+        ("maxdepth", po::value<double>()->required(), "Maximum shower depth")
+        ("image", po::value<string>()->required(), "The basename for the output image")
+        ("roughness", po::value<bool>()->default_value(true), "Whether to incorporate roughness")
+        ("slopes", po::value<bool>()->default_value(true), "Whether to incorporate surface slope");
+    // ("eventfile", po::value<string>()->required(), "The event file to read in");
+
+    // create variable map
+    po::variables_map vm;
+    try {
+        // store command line variables
+        po::store(po::parse_command_line(argc, argv, desc), vm);
+
+        // print the help descriptions
+        if (vm.count("help") || argc == 1) {
+            cout << desc << endl;
+            return true;
+        }
+
+        // throw exceptions if there are any problems
+        po::notify(vm);
+    }
+
+    // catch required option exception
+    catch(po::required_option e) {
+        std::cerr << e.what() << endl;
+        return false;
+    }
+    // catch unknown option exception
+    catch(po::unknown_option e) {
+        std::cerr << e.what() << endl;
+        return false;
+    }
+
+    // Command line parsing ABOVE
+    ////////////////////////////////////////////////////////////////////////////
+    // Simulation BELOW
+
+    // define arrays; can we use C++14 std::array here instead? 
+    double Etheta[NFREQ][NEL][NAZ] =  {0};
+    double EthetaV[NFREQ][NEL][NAZ] = {0};
+    double EthetaH[NFREQ][NEL][NAZ] = {0};
+    double EthetaP[NFREQ][NEL][NAZ] = {0};
+    double Ntheta[NFREQ][NEL][NAZ] =  {0};
+
+    // read the first two lines from the input in order to skip comment lines
+    std::string none;
+    getline(cin, none); getline(cin, none);
+
+    // create a ray struct for the below loops
+    Ray ray;
+
+    // we loop over the desired number of neutrino events
+    for (int i = 0; i < vm["numevents"].as<int>(); i++) {
+
+	// zero out arrays; there has got to be a better way! RP
+	memset(Etheta,  0, NFREQ*NEL*NAZ*sizeof(double));
+	memset(EthetaV, 0, NFREQ*NEL*NAZ*sizeof(double));
+	memset(EthetaH, 0, NFREQ*NEL*NAZ*sizeof(double));
+	memset(EthetaP, 0, NFREQ*NEL*NAZ*sizeof(double));
+	memset(Ntheta,  0, NFREQ*NEL*NAZ*sizeof(double));
+
+	// we read in the events from STDIN
+	Event event = getEvent();
+
+	// and check whether the event is valid
+	if (!event.valid) {
+	    continue;
+	}
+
+	// pick a random neutrino flavor
+	Flavor flavor = randomNeutrinoFlavor();
+
+	// compute resulting shower energy
+	ShowerEnergy shower = computeShowerEnergy(event, flavor);
+
+	// setup Cherenkov angular distribution functions
+	computeShower(shower, flavor, event);
+
+	// Add random slope component to upang
+	if (vm["slope"].as<int>()) event.up_angle += MEANSLOPE*(180./M_PI)*gaussian();
+
+	// convert degrees back to radians
+	event.nadir_angle *= M_PI/180.0;
+	event.up_angle *= M_PI/180.0;
+
+	// LOOP OVER FREQUENCY BANDS
+	for (int fidx = 0; fidx < NFREQ; fidx++) {
+
+	    // LOOP OVER THE RAYS IN THE SHOWER
+	    for (int ridx = 0; ridx < vm["numrays"].as<int>(); ridx ++) {
+
+		// zero out struct
+		ray.reset();
+		ray.z = -event.depth;
+		ray.cz = (1./K); /* ray along theta direction m/ns */
+
+		// aim the array according to expected shower distribution
+		double theta = getShowerTheta(fidx);
+		double phi = 0.0; // phi is not used in these coordinates
+		double psi = 2.0*M_PI*uniform();
+		ray.rotatey(theta, phi, psi);
+
+		// and now rotate by the shower angles
+		double Stheta = M_PI/2.0 - event.up_angle;
+		ray.rotatey(-Stheta, 0, 0);
+
+		// we get the field waited by ZSH factor
+		double Ef = ZHSFAC*getField(shower, 1.0, nu0, numin[fidx], numax[fidx],
+					    theta, flavor, depth, dnufac[fidx]);
+
+		// if(Ef>Efmax[fidx]){
+		//     Efmax[fidx] = Ef;
+		//     thetamax=theta;
+		// }
+
+		/* now calculate distance to surface along ray trajectory*/
+		// double D = (ray.cz < 0.0) ? 1e4 : (depth/ray.cz)/K;
+		//  if(D==1e4) continue;
+
+		// we not propagate each ray
+		while (ray.z <= 0.0) {
+
+		    // get exit position in x-y plane
+		    // ray.propagate(D);
+
+		} // END PROPAGATION LOOP
+	    } // END LOOP OVER RAYS
+	} // END LOOP OVER FREQUENCY BANDS
+    } // END LOOP OVER NEUTRINO EVENTS
+
+    return true;
+}
+
+Flavor randomNeutrinoFlavor() {
+
+    // NOTE: boost::uniform_int is a closed range (0, 1, 2)
+    // unlike open range of normal C/C++ RNG's
+    boost::uniform_int<int> dist(0,2);
+
+    // we use a global generator to avoid initialize a Mersenne Twister each invocation
+    boost::variate_generator<boost::mt19937&, boost::uniform_int<int>> flavor(gen, dist);
+
+    return static_cast<Flavor>(flavor());
+}
+
+double uniform() {
+
+    // NOTE: boost::uniform_int is a closed range (0, 1, 2)
+    // unlike open range of normal C/C++ RNG's
+    boost::uniform_real<double> dist(0,1);
+
+    // we use a global generator to avoid initialize a Mersenne Twister each invocation
+    boost::variate_generator<boost::mt19937&, boost::uniform_real<double>> uni(gen, dist);
+
+    return uni();
+}
+
+int poisson(double mean) {
+
+    // poisson distribution generator
+    boost::poisson_distribution<int> dist(mean);
+
+    // we use a global generator to avoid initialize a Mersenne Twister each invocation
+    boost::variate_generator<boost::mt19937&,
+                             boost::poisson_distribution<int>> pois(gen, dist);
+
+    // return a poisson sampled variable
+    return pois();
+}
+
+double gaussian(double mean, double stdev) {
+
+    // normal distribution - mean and stdev
+    boost::normal_distribution<double> dist(mean, stdev);
+
+    // we use a global generator to avoid initialize a Mersenne Twister each invocation
+    boost::variate_generator<boost::mt19937&,
+                             boost::normal_distribution<double>> norm(gen, dist);
+
+    return norm();
+}
+
+Event getEvent() {
+
+    // find the parser
+    namespace qi = boost::spirit::qi;
+
+    // declare a new event
+    Event event = {};
+
+    // get a line from STDIN
+    std::string input;
+    getline(cin, input);
+
+    // check whether this is a comment line
+    // if so, we return an invalid event
+    if (input.front() == '#') {
+	event.valid = false;
+	return event;
+    }
+
+    // otherwise we have a valid event line
+    event.valid = true;
+
+    // check if it is a comment line
+    using qi::int_;
+    using qi::double_;
+    using qi::ascii::space;
+
+    // get start and end of string
+    std::string::iterator begin = input.begin();
+    std::string::iterator end = input.end();
+
+    // parse the line from stdin
+    qi::phrase_parse(begin, end,
+                     int_ >> int_ >> double_ >> double_ >> double_ >> double_ >>
+                     double_ >> double_ >> int_ >> int_, space,
+                     event.trial_num, event.event_num,
+                     event.nadir_angle, event.up_angle,
+                     event.Lint, event.Ltot, event.chord_len,
+                     event.depth, event.current, event.energy);
+
+
+    return event;
+}
+
+ShowerEnergy computeShowerEnergy(Event event, Flavor flavor) {
+
+    // get a Bjorken y-value
+    double y = getYValue();
+
+    // construct a shower
+    ShowerEnergy shower = {};
+
+    // electron neutrino
+    if (flavor == Flavor::Electron) {
+        // PG MC
+
+        shower.em = (event.current == Current::Charged) ? event.energy*(1.0 - y) : 1.e8;
+
+        // RP: what is up with the 1.e8?
+        // a NC interaction doesn't have an electromagnetic component?
+        // so shouldn't it be 0?
+        shower.em = (event.current == Current::Charged) ? event.energy*(1.0 - y) : 0;
+        shower.had = event.energy*(y);
+    }
+    // muon neutrino
+    else if (flavor == Flavor::Muon) {
+
+        // CHARGED CURRENT
+        if (event.current == Current::Charged) {
+
+            // muon energy
+            double Emu = event.energy*(1 - y);
+
+            // BREMSSTRAHLUNG //
+            // int num_brems = poisson(Nmu_brem);
+
+            // PAIR PDOUCTION //
+            // int num_pair = poisson(Nmu_pair);
+
+            // PHOTO NUCLEAR //
+            // int num_photo = poisson(Nmu_photo);
+
+        }
+        // NEUTRAL CURRENT
+        else if (event.current == Current::Neutral) {
+        }
+
+    }
+    else if (flavor == Flavor::Tau) {
+    }
+    else {
+        cerr << "Unknown neutrino flavor... This should never happen." << endl;
+        throw std::exception();
+    }
+
+    return shower;
+}
+
+double getYValue() {
+    return 0.2;
+}
+
+double getFirnDensity(double depth) {
+
+    // fit by PG (2/27/2005) for firn density as a function of depth:
+    // fit from gnuplot using rice data
+    //f(x) = 0.68 + a1*(1.0-exp(-b1*x));
+    //a1 = .22; b1 = .0131
+
+    // depth is in m
+    return (0.68 + 0.22*(1.0-exp(-0.0131*depth)));
+}
+
+/* this is a polynomial fit to the change in RF loss coefficient at 300 MHz
+   vs. depth for data from Bogorodsky's book */
+/* the average from depth to 0 is computed and returned*/
+// straight lift from PG MC
+double get_avg_alpha(double alpha, double depth)  // depth in m
+{
+    double alpha0_300=6.6e-4;
+    double coeff=6.24e-17;
+    double dD = depth/100.;
+    double losstot = 1.0;
+    for(double depth1=depth; depth1 >= 0.0; depth1 -= dD){
+        losstot *= exp(-(alpha + coeff*pow(depth1,4.0))*dD);
+    }
+    double avgloss = -log(losstot)/depth;
+    return avgloss;  //loss factor per meter
+}
+
+// this sets the global variable Sham
+void computeShower(ShowerEnergy shower, Flavor flavor, Event event) {
+
+    // get the local density of firn
+    double localdensity = getFirnDensity(event.depth);
+
+    double Elpm = 2.e15*0.90/localdensity;  /* for ice*/
+
+    // cherenkov angle
+    double thetaC = acos(1.0/Nref);
+
+    /* from Alvarez-Muniz & Zas, Phys Lett B 411 (1997) we have
+       Efield(theta) = Efield(thetaC)*exp(-ln2*((theta-thetaC)/sigma)**2)
+       where sigma= 2.7deg * nu0/nu * (Elpm/(0.14*Esh+Elpm))**0.3 for Esh>1PeV
+       for electron showers  IN ICE */
+    // https://arxiv.org/abs/astro-ph/9706064
+
+    /* from Alvarez-Muniz & Zas, Phys Lett B 434 (1998) we have
+       sigma= 1deg * nu0/nu * (1.71 - 0.0121*log10(E/1TeV) ) for 0.1PeV <E<100PeV
+       sigma= 1deg * nu0/nu * (4.23 - 0.785*log10(E/1TeV)+0.055*(log10(E/1TeV))**2), E>100PeV
+       for hadronic showers in ICE*/
+    // https://arxiv.org/abs/astro-ph/9906347
+
+    // hadronic component
+    double Eh = log10(shower.had/1.e12); // hadronic energy in log(TeV)
+    Eh = (Eh > 7.0)? 7.0: Eh; // kluge to avoid divergence of parameterization above 1e19
+    double fEh = -1.27e-2-4.76e-2*(Eh+3)-2.07e-3*(Eh+3)*(Eh+3)+0.52*sqrt(Eh+3);
+    double trlh = 6.25*fEh*shower.had/1.e9 *0.90/localdensity;  /* proj. tracklength in m */
+
+    // electromagnetic component
+    double E1e = log10(shower.em/1.e12);
+    double fEe = -1.27e-2-4.76e-2*(E1e+3)-2.07e-3*(E1e+3)*(E1e+3)+0.52*sqrt(E1e+3);
+    double trle = 6.25*fEe*shower.em/1.e9 *0.90/localdensity;  /* proj. tracklength in m */
+
+    double deltathet1[NFREQ] = {0};
+    double deltathet2[NFREQ] = {0};
+    double tmp[NFREQ][NA+1]  = {0};
+    double sham[NFREQ][NA+1] = {0};
+
+    double dnu = 0; // interval for integration
+    double bw = 0;
+    double nu0 = NU0/1.e6;
+
+    // iterate over frequency bands
+    for (int fidx = 0; fidx < NFREQ; fidx++) {
+	dnu = BW[fidx];
+
+	// we iterate over the different neutrino flavors
+	if (flavor == Flavor::Electron) {
+	    // first width is for EM shower, 2nd for hadronic
+	    // added integration over nu for all flavors--10/13/2005 PG
+
+	    for (double nu = NUBAR[fidx] - BW[fidx]/2.; nu <= NUBAR[fidx] + BW[fidx]/2.; nu += dnu) {
+		deltathet1[fidx] += (2.7*M_PI/180.0)*nu0/nu *
+		    pow(Elpm/(0.14*shower.em+Elpm),0.3) * localdensity/0.9 * dnu;
+		deltathet2[fidx] += (1.0*M_PI/180.0)*nu0/nu *
+		    (4.23-0.785*Eh+5.5e-2*Eh*Eh) * localdensity/0.9 * dnu;
+		bw += dnu;
+	    }
+	    deltathet1[fidx] /= bw;
+	    deltathet2[fidx] /= bw;
+	}
+	else if (flavor == Flavor::Muon) {
+	    for (double nu=(NUBAR[fidx]-BW[fidx]/2.);nu<=(NUBAR[fidx]+BW[fidx]/2.);nu+= dnu){
+		deltathet1[fidx] += (2.7*M_PI/180.0)*nu0/nu *
+		    pow(Elpm/(0.14*shower.em+Elpm),0.3) * localdensity/0.9 * dnu;
+		deltathet2[fidx] += (1.0*M_PI/180.0)*nu0/nu *
+		    (4.23-0.785*Eh+5.5e-2*Eh*Eh) * localdensity/0.9 * dnu;
+		bw += dnu;
+	    }
+	    deltathet1[fidx] /= bw;
+	    deltathet2[fidx] /= bw;
+	}
+	else if (flavor == Flavor::Tau) {
+	    for (double nu=NUBAR[fidx]-BW[fidx]/2.;nu<=NUBAR[fidx]+BW[fidx]/2.;nu+= dnu){
+		deltathet1[fidx] += (2.7*M_PI/180.0)*nu0/nu *
+		    pow(Elpm/(0.14*shower.em+Elpm),0.3) * localdensity/0.9 * dnu;
+		deltathet2[fidx] += (1.0*M_PI/180.0)*nu0/nu *
+		    (4.23-0.785*Eh+5.5e-2*Eh*Eh) * localdensity/0.9 * dnu;
+		bw += dnu;
+	    }
+	    deltathet1[fidx] /= bw;
+	    deltathet2[fidx] /= bw;
+	}
+
+    } // END LOOP OVER FREQUENCY BANDS
+
+    //update the global variables for the angular width
+    for(int fidx=0;fidx<NFREQ;fidx++){
+	Dtheta[fidx].em = deltathet1[fidx];
+	Dtheta[fidx].had = deltathet2[fidx];
+//        fprintf(stderr,"f=%e nut=%d  dthet1= %e  dthet2= %e\n",nubar[fidx],nut,  deltathet1[fidx], deltathet2[fidx]);
+    }
+
+    for(int fidx=0;fidx<NFREQ;fidx++){
+	for(int i=0;i<=NA;i++){
+	    sham[fidx][i] = 0.0;
+	    Sham[fidx][i] = 0.0;
+	}
+    }
+
+    for(int fidx=0;fidx<NFREQ;fidx++){
+	for(int i=0;i<=NA;i++){
+	    double gam = ((static_cast<double>(i))/NA)*M_PI;    /* polar angle in rad, 0-PI */
+	    /* this uses Jaime's function, scaled for field */
+	    sham[fidx][i] = sin(gam)*shower.em*exp(-0.693*pow((gam-thetaC)/deltathet1[fidx],2.0))
+		+ sin(gam)*shower.had*exp(-0.693*pow((gam-thetaC)/deltathet2[fidx],2.0));
+
+	    if(i>0) for(int k=i-1;k>=0;k--)Sham[fidx][i] += sham[fidx][k]; // cumulate it
+	}
+    }
+    // this normalizes the cumulative distribution:
+    for(int fidx=0;fidx<NFREQ;fidx++){
+	for(int i=0;i<=NA;i++){
+	    Sham[fidx][i] /= Sham[fidx][NA];
+	    tmp[fidx][i] = 0.0;
+//      fprintf(stdout,"%d  %f\n", i, Sham[i]);
+	}
+    }
+/* now reflect around y=x to create inverse CDF*/
+    for(int fidx=0;fidx<NFREQ;fidx++){
+	for(int i=0;i<=NA;i++){
+	    tmp[fidx][static_cast<int>(round(Sham[fidx][i]*NA))] = static_cast<double>(i)/NA;
+	}
+    }
+    /* this vector will have some holes because the map is not 1-1 */
+    /* so we need to linearly interpolate over the holes : */
+    /* linear interpolation: */
+    for (int fidx=0; fidx<NFREQ; fidx++){
+	double s0 = 0.0; int i0 = 0; int i1 = 0;
+	double s1, slope;
+	for(int i=1; i<NA; i++){
+	    if(tmp[fidx][i] == 0.0){
+		continue;
+	    }else{
+		s1= tmp[fidx][i];
+		i1 = i;
+		slope = (s1-s0)/static_cast<double>(i1-i0);
+		for(int k=i0+1;k<i1;k++){
+		    tmp[fidx][k] = tmp[fidx][i0]+slope*static_cast<double>(k-i0);
+		}
+	    }
+	    i0 = i1;
+	    s0 = s1;
+	}
+	tmp[fidx][NA] = Sham[fidx][NA];
+    }
+/* end of linear interpolation */
+
+    for(int fidx=0;fidx<NFREQ;fidx++){
+	for(int i=1;i<NA;i++){
+	    Sham[fidx][i] = tmp[fidx][i];
+	}
+    }
+
+    // we have set the global Sham
+}
+
+double getShowerTheta(int fidx)  /* from cumulative shower function */
+{
+    /* this function takes a ray, should be aligned with
+       shower axis, and returns angle in a direction drawn according
+       to the cascade cherenkov light distribution */
+
+    double dr = (1.-drand48())*NA;
+    int iangle = static_cast<int>(round(dr));
+    double theta = M_PI*(Sham[fidx][iangle]);
+    return(theta);
+
+}
+
+double getIceIndex(double depthm) // depth in meters
+{
+    return (1.325 + 0.463*(1.0-exp(-.0140*depthm)));
+}
+
+//-------------------------------------------------------------------
+/* field strength from Alvarez-muniz et al PRD 62,63001 (2000) */
+/* Ec = cascade energy, D is distance in m, nu0 is rolloff freq,
+   numin, numax limits of bandpass in MHz, result  */
+double getField(ShowerEnergy shower, double dist, double numin, double numax,
+                double nu0, double depth, double theta, Flavor nut, double dnufacv) {
+
+    double bandwidth = numax - numin;
+    double dnu = bandwidth/dnufacv; // width of each frequency interval
+
+    // correction factor in PG MC to account for
+    // extra path length, lower refractive index in firn
+    double n_ice = getIceIndex(depth);
+    double localdensity = getFirnDensity(depth);
+    double firnfactor = (0.90/localdensity)*sqrt(cos(1.0/n_ice))/sqrt(cos(1.0/1.79));
+
+    // make a pair of em and hadronic components
+    std::vector<double> shower_energy;
+    shower_energy.push_back(shower.had);
+    shower_energy.push_back(shower.em);
+
+    // field strength
+    double field = 0;
+
+    // we iterate over the frequency intervals
+    for (double nu = numin; nu < numax; nu += dnu) {
+
+        // and iterate over the two shower components
+        // for (auto& Es : shower_energy) {
+        for (long unsigned int i = 0; i < 2; i ++) {
+
+            // this is an almost straight lift from PG MC
+
+            // shower energy for this component
+            double Es = shower_energy[i];
+
+            // get shower energy in units of TeV?
+            // RP: Why are we not staying in logspace the whole time?
+            double EE = Es/1.e12;
+
+            /* Fac contains various terms including the differential */
+            // Fac = 2.53e-7*dfac*EE*Firnfactor*dnu; origal ZHS; below is a
+            // modified empirical formula which rolls the energy off
+            // slowly above 1e23 eV to account for energy saturation
+            // from PG
+            double Fac = (1.0/dist)*firnfactor*2.53e-7*(EE*sqrt((1.-exp(-1.e23/Es))) +
+                                                        sqrt(EE*(1.-exp(-Es/1.e23)))) ;
+
+            double Elpm = 2.e15 * (0.9/localdensity);  /* electromagnetic, for ice*/
+
+            double thetaC = acos(1./Nref);
+
+            double E1 = log10(Es/1.e12); /* now in log units TeV, USED ONLY FOR ANGLES */
+            if(nut > Flavor::Electron && E1 > 7.0) E1 = 7.0;  // kluge to fix divergence of ZHS param.!!
+
+            double fE = -1.27e-2-4.76e-2*(E1+3)-2.07e-3*(E1+3)*(E1+3)+0.52*sqrt(E1+3);
+            double trl = 6.25*fE*Es/1.e9;  /* proj. tracklength in m */
+            double dthet = theta-thetaC;
+
+            /* from Alvarez-Muniz & Zas, Phys Lett B 411 (1997) we have
+               Efield(theta) = Efield(thetaC)*exp(-ln2*((theta-thetaC)/sigma)**2)
+               where sigma = 2.7deg * nu0/nu * (Elpm/(0.14*Esh+Elpm))**0.3 for Esh>1PeV
+               for electron showers  IN ICE */
+
+            /* from Alvarez-Muniz & Zas, Phys Lett B 434 (1998) we have
+               sigma = 1deg * nu0/nu * (1.71 - 0.0121*log10(E/1TeV) ) for 0.1PeV <E<100PeV
+               sigma = 1deg * nu0/nu * (4.23 - 0.785*log10(E/1TeV)+0.055* (log10(E/1TeV))**2) for E>100PeV
+               for hadronic showers in ICE*/
+
+            double nn = (nu/nu0);
+            double nn0 = (nu/500.0); /* for the angles not the coherence */
+            double deltathet = 0;
+
+            if(nut == Flavor::Electron) {  /* electron neutrino; 2.6 factor for decrease in shower length*/
+
+                double ange = (2.7*M_PI/180.0);
+                double Elfac =  pow(Elpm/(0.14*Es+Elpm),0.3);
+                deltathet = ange/nn0 * Elfac*localdensity/0.90;
+                if (i==0) {                          // hadronic part of e- shower
+                    ange =  (1.0*M_PI/180.0);
+                    double Emfac = (4.23-0.785*E1+5.5e-2*E1*E1);
+                    deltathet = ange/nn0 * Emfac *localdensity/0.90;
+                }
+            }
+            else if (nut == Flavor::Muon) {  /* muon neutrino */
+
+                double angmu =  (1.0*M_PI/180.0);
+                double Emfac = (4.23-0.785*E1+5.5e-2*E1*E1);
+                deltathet = angmu/nn0 * Emfac *localdensity/0.90;
+
+            }
+            else if (nut == Flavor::Tau) { // tau neutrino, similar to muon
+
+                double angtau =  (1.0*M_PI/180.0);
+                double Etfac = (4.23-0.785*E1+5.5e-2*E1*E1);
+                deltathet = angtau/nn0 * Etfac *localdensity/0.90;
+            }
+
+            field += Fac*nn*(1./(1.+pow(nn,1.44)))
+                *exp(-0.693*pow(dthet/deltathet,2.0)) * dnu;
+        }
+    }
+
+    return (field/bandwidth);
+}
+//-------------------------------------------------------------------
+

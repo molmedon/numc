@@ -1,0 +1,78 @@
+#ifndef __EMISSION__
+#define __EMISSION__
+
+// neutrino flavors
+enum class Flavor { Electron, Muon, Tau };
+
+// define current interactions
+enum class Current { Neutral, Charged };
+
+// frequency
+#define NFREQ 10
+
+static double NUBAR[NFREQ]= { 250.e6,350e6,450e6,550e6,650e6,750e6,850e6,950e6,1050e6,1150e6 }; // center frequencies, unweighted
+static double BW[NFREQ] = {100e6,100e6,100e6,100e6,100e6,100e6,100e6,100e6,100e6,100e6};  // 3 dB bandwidths
+static double dnufac[NFREQ] = {5,5,5,5,5,5,5,5,5,5}; // number of frequency integration intervals per band
+
+// absorption
+static double alpha0[NFREQ] = {5.793480e-04 , 6.644813e-04 , 7.393419e-04 , 7.960876e-04 ,
+                               8.406714e-04 , 8.782108e-04 , 9.123559e-04 , 9.460117e-04 , 9.796675e-04 , 1.013323e-03 };
+
+// image file defs
+#define NEL  128                /* size of angular intensity array */
+#define NAZ  256                /* size of angular intensity array */
+#define NI   NEL*NAZ
+#define NA   28800              /* number of angular bins to use */
+
+
+// general purpose defines
+#define K          5.9375   /* inverse speed of light in ice in ns/m, Nref=1.78 */
+#define C0         2.9979e8    /* speed of light */
+#define C          3.336            /* inverse vacuum speed of light, ns/m */
+#define H          8.0       /* ~longitudinal size (m) of cascade shower max */
+#define Nref       1.78      /* index of refraction of ice */
+#define Nfirn      1.325     /* index of refraction at the surface */
+#define Nair       1.000186   /* radio index of refraction of dry air, 3km altitude, -20C*/
+#define TIR        0.604594    /* total internal reflectance angle wrt normal */
+#define NU0        1.15e9     /* reference CR output frequ */
+#define ROUGH      0.0280   /* surface local slope rms roughness, 1 deg=0.0175 rad std, 1.7 degrees from Taylor data*/
+#define MEANSLOPE  0.0175   /* mean surface slope ~km scales, 1 deg=0.0175 rad.std*/
+#define ZHSFAC   0.707   // the dreaded ZHS field strength correction
+
+// declare event struct for parsing input from previous program
+struct Event {
+    int valid;
+    int trial_num;
+    int event_num;
+    double nadir_angle;
+    double up_angle;
+    double Lint;
+    double Ltot;
+    double chord_len;
+    double depth;
+    Current current;
+    int energy; // neutrino energy
+};
+
+struct ShowerEnergy {
+    double em; // electromagnetic component energy
+    double had; // hadronic component energy
+};
+
+ShowerEnergy  Dtheta[NFREQ];   // global for keeping track of angular width of Cherenkov cone, 9/04--PG
+double Sham[NFREQ][NA+1];  /* array of cumulative shower angular dist fn */
+
+// function definitions
+Flavor randomNeutrinoFlavor();
+int poisson();
+double uniform();
+double getShowerTheta(int findex);
+double gaussian(double mean=0, double stdev=1);
+Event getEvent();
+double getYValue();
+double getFirnDensity();
+void computeShower(ShowerEnergy shower, Flavor flavor, Event event);
+ShowerEnergy computeShowerEnergy(Event event, Flavor flavor);
+double getField(ShowerEnergy shower, double dist, double numin, double numax,
+		double nu0, double depth, double theta, Flavor nut, double dnufac);
+#endif

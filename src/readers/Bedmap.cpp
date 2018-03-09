@@ -2,6 +2,7 @@
 #include <fstream>
 #include <iostream>
 #include <NuMC.hpp>
+#include <Utils.hpp>
 #include <algorithm>
 #include <Constants.hpp>
 #include <readers/Bedmap.hpp>
@@ -84,8 +85,8 @@ __attribute__((hot)) inline std::pair<int, int> Bedmap::coordToBEDMAPIndices(con
     int yi = static_cast<int>(std::round((-y - this->yllcorner)/this->cellsize));
 
     // clamp the values to the ncols/nrows range provided by the file
-    xi = std::clamp(xi, 0, this->ncols);
-    yi = std::clamp(yi, 0, this->nrows);
+    // xi = utils::clamp(xi, 0, this->ncols);
+    // yi = utils::clamp(yi, 0, this->nrows);
 
     // and make a pair
     return std::make_pair(xi, yi);

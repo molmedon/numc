@@ -35,7 +35,7 @@ CPPFLAGS = -Iinclude -isystem/usr/include/boost -isystem/usr/include/root # incl
 CPPFLAGS += -isystemlib/include/ # and 3rd party libs without warnings too
 
 # compiler falgs
-CFLAGS += -std=c++1z -Wall -Wextra -Wdisabled-optimization -pedantic -Wshadow
+CFLAGS += -std=c++14 -Wall -Wextra -Wdisabled-optimization -pedantic -Wshadow
 CFLAGS += -Wstrict-overflow=5 -Wsign-conversion -Wold-style-cast -Wcast-align
 CFLAGS += -Wundef -Wno-unused -Wlong-long -Wconversion -Wstack-protector
 CFLAGS += -Wpointer-arith -Wpacked -Wformat-y2k -Warray-bounds -Wreorder

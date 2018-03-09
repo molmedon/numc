@@ -45,11 +45,11 @@ InteractionList Propagator::propagate(Neutrino particle) const {
     // particle through the Earth until the neutrino interacts
     // in such a way that it would generate a detectable pulse
 
+    // initialize a new vector to store interactions of this particle
+    InteractionList interactions;
+
     int ntrials = 1; // the number of particle attempts before a successful interaction
     while (ntrials) {
-
-        // initialize a new vector to store interactions of this particle
-        InteractionList interactions;
 
         // get random location on the surface of the sphere
         // TODO: VERIFY
@@ -70,16 +70,19 @@ InteractionList Propagator::propagate(Neutrino particle) const {
 
         // we create a new Interaction to store the initial state of the propagation
         Interaction interaction = Interaction(0, particle, surface, direction,
-                                              0, Current::Charged, chord_length, 0, 0);
+                                              Current::Charged, 0);
 
         // we step through the Earth
         for (double distance = 0. ; distance < chord_length; )  {
 
             // we get the local density and material of the earth at the current location
-            auto [density, material] = this->continent.getDensityAndMaterial(interaction.location);
+            double density = this->continent.getDensity(interaction.location);
 
             // get the interaction length at this density
-            auto [interaction_length, current] = interaction.particle.getInteractionLength(density);
+            // shame we can't use C++17 here :(
+            auto interactionAndCurrent = interaction.particle.getInteractionLength(density);
+            double interaction_length = interactionAndCurrent.first;
+            Current current = interactionAndCurrent.second;
 
             // TODO: check for interaction and get current
             bool interacted = true; // replace this with whether we have interacted
@@ -113,6 +116,8 @@ InteractionList Propagator::propagate(Neutrino particle) const {
         ntrials++; // Peter has ntrials += 2. Why?
 
     } // END: while (ntrials)
+
+    return interactions;
 
 }
 

@@ -27,10 +27,10 @@ std::pair<double, Current> Particle::getInteractionLength(const double density) 
     double NClength = 1.0/(density*this->getCrossSection(Current::Neutral));
 
     if (CClength > NClength) {
-        return std::pair(NClength, Current::Neutral);
+        return std::pair<double, Current>(NClength, Current::Neutral);
     }
     else {
-        return std::pair(NClength, Current::Charged);
+        return std::pair<double, Current>(NClength, Current::Charged);
     }
 }
 

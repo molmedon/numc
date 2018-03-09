@@ -3,12 +3,14 @@
 #include <iostream>
 #include <algorithm>
 #include <readers/Flux.hpp>
+#include <Math/Interpolator.h>
 #include <boost/range/adaptors.hpp>
 #include <boost/range/algorithm.hpp>
 
 using namespace anita::readers;
 
-Flux::Flux(std::string filename) : spline(ROOT::Math::Interpolator(0, ROOT::Math::Interpolation::kCSPLINE)) {
+Flux::Flux(const std::string filename) : spline(new ROOT::Math::Interpolator(0, ROOT::Math::Interpolation::kCSPLINE)) {
+
 
     // directory of the flux data files
     const std::string flux_dir = std::string(DATA_DIR) + std::string("/fluxes/");
@@ -65,7 +67,7 @@ Flux::Flux(std::string filename) : spline(ROOT::Math::Interpolator(0, ROOT::Math
                 std::back_inserter(y));
 
     // we build a interpolation scheme using ROOT; this is a cubic spline
-    this->spline.SetData(static_cast<unsigned int>(x.size()), &x[0], &y[0]);
+    this->spline->SetData(static_cast<unsigned int>(x.size()), &x[0], &y[0]);
 
     // and we are done
 }

@@ -39,9 +39,10 @@ namespace anita {
 
         // returns the density (in XXXXX) of the continent a given theta/phi(radians) and radius (in km)
         double getDensity(const double theta, const double phi, const double radius) const;
+        double getDensity(const SphericalCoordinate coord) const;
 
         // returns the density (in XXXXX) of the continent a given theta/phi(radians) and radius (in km)
-        std::pair<double, Material> getDensityAndMaterial(const SphericalCoordinate location) const;
+        std::pair<double, Material> getDensityAndMaterial(const SphericalCoordinate coord) const;
         std::pair<double, Material> getDensityAndMaterial(const double theta, const double phi, const double radius) const;
 
         // get the slope of a given theta/phi (radians) location in spherical coordinates
