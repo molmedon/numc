@@ -14,16 +14,10 @@ Note for MacOS users: on a default MacOS installation, `g++` is _aliased_ to Cla
 Once you have met these requirements, you can setup the repo as follows
 
      # clone the repo
-     git clone https://github.com/rprechelt/numc
+     git clone --recursive https://github.com/rprechelt/numc
      
      # change into the repo directory
      cd numc
-     
-     # initialize the submodules
-     git submodule init
-     
-     # and download them - this provides some dependencies for the project
-     git submodule update
      
      # you can then compile the code with make
      # the first time you run make, it will automatically download several large data files
