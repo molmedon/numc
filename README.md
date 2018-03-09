@@ -7,7 +7,7 @@ The `master` branch should always compile and run succesfully, but is under heav
 ## Installation
 **Before cloning the repo**, you will need to install the Git [LFS](https://git-lfs.github.com/) extension; this allows us to store large data files in the repo without including them in the regular Git log _significantly_ improving push/pull performance. 
 
-To install and run the code, you will need GCC>=6 (GCC>=7 is preferred), a working installation of Boost, and ROOT. 
+To install and run the code, you will need GCC>=5.2 (GCC>=6 is preferred), a working installation of Boost, and ROOT. 
 
 Note for MacOS users: on a default MacOS installation, `g++` is _aliased_ to Clang. This code has not currently been tested to compile under Clang, but _may_ work, although you may miss out on a few compiler optimizations due to our use of GCC-specific attributes. 
 
