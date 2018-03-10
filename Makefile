@@ -10,6 +10,9 @@ BIN_DIR = build
 # and the name of the test executable
 TESTBIN = build/Test_NuMC
 
+# and a directory to store the output files from the test
+TEST_OUTPUT_DIR = $(shell pwd)/test/output
+
 # set source and object directories
 SRC_DIR = src
 OBJ_DIR = obj
@@ -46,7 +49,7 @@ CFLAGS += -DDATA_DIR=\"$(DATA_DIR)\"
 LDFLAGS = -Llib -L/usr/lib/root
 
 # libs for ROOT
-ROOTLIBS = -lHist -lCore -lTree -lRIO -lTreePlayer -lMathCore -lMathMore
+ROOTLIBS = -lHist -lCore -lTree -lRIO -lTreePlayer -lMathCore -lMathMore -lGpad
 
 # libs for BOOST
 BOOSTLIBS = -lboost_program_options
@@ -80,7 +83,7 @@ $(OBJ_DIR)/%.o: $(SRC_DIR)/%.cpp
 
 # we provide a rule to compile the objects
 $(OBJ_DIR)/%.o: $(TEST_DIR)/%.cpp
-	$(CXX) $(CPPFLAGS) $(CFLAGS) -c $< -o $@
+	$(CXX) $(CPPFLAGS) $(CFLAGS) -DOUTPUT_DIR=\"$(TEST_OUTPUT_DIR)\" -c $< -o $@
 
 # if bedmap hasn't been unzipped, unzip it and store it in the data directory
 data/bedmap2_bin: data/bedmap2_bin.zip
@@ -90,6 +93,7 @@ data/bedmap2_bin: data/bedmap2_bin.zip
 data/bedmap2_bin.zip:
 	wget -c https://secure.antarctica.ac.uk/data/bedmap2/bedmap2_bin.zip --directory-prefix=data
 
-# delete the object and binary for clean
+# delete all objects, binaries, and test results
 clean:
-	rm -rf $(OBJ) $(TEST_OBJ) $(BIN) obj/lib/*.o
+	rm -rf $(OBJ) $(TEST_OBJ) $(BIN) $(TESTBIN) obj/lib/*.o test/output/*
+
