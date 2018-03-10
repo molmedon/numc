@@ -30,8 +30,7 @@ namespace anita { namespace readers {
 
             // returns the flux at a given energy
             double getFlux(const double energy) const {
-                return 0.;
-                // return this->spline.Eval(energy);
+                return this->spline->Eval(energy);
             };
 
 
