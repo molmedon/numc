@@ -1,5 +1,6 @@
 #pragma once
 
+#include <Particle.hpp>
 #include <CrossSections.hpp>
 #include <readers/Table.hpp>
 
