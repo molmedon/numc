@@ -23,7 +23,9 @@ DATA_DIR = $(shell pwd)/data
 # this is saved into all output data files to verify the code
 # that produced any particular data file
 HASH = $(shell find ${SRC_DIR} ${OBJ_DIR} -type f -name "*.cpp" -exec md5sum {} \; | sort -k 2 | md5sum | tr -d '-' | sed -e's/[[:space:]]*$$//')
-# COMMIT = $(shell git rev-parse HEAD)
+
+# the first 8 characters of the current git commit
+COMMIT = $(shell git rev-parse HEAD | head -c 8)
 
 # find all the source files
 SRC = $(wildcard $(SRC_DIR)/*.cpp) $(wildcard $(SRC_DIR)/readers/*.cpp)
@@ -31,6 +33,7 @@ TEST_SRC = $(wildcard $(TEST_DIR)/*.cpp) $(wildcard $(TEST_DIR)/readers/*.cpp)
 
 # and make the appropriate object files
 OBJ = $(SRC:$(SRC_DIR)/%.cpp=$(OBJ_DIR)/%.o)
+DEPS = $(SRC:$(SRC_DIR)/%.cpp=$(OBJ_DIR)/%.d)
 TEST_OBJ = $(TEST_SRC:$(TEST_DIR)/%.cpp=$(OBJ_DIR)/%.o)
 
 # preprocessor flags - include boost and root
@@ -45,6 +48,10 @@ CFLAGS += -Wpointer-arith -Wpacked -Wformat-y2k -Warray-bounds -Wreorder
 CFLAGS += -mtune=native
 CFLAGS += -DDATA_DIR=\"$(DATA_DIR)\"
 
+# output options for compilation
+# -MMD and -MP produce header file dependency maps for each source file
+OUTPUT_OPTS = -MMD -MP -o
+
 # linker flags
 LDFLAGS = -Llib -L/usr/lib/root
 
@@ -57,17 +64,17 @@ BOOSTLIBS = -lboost_program_options
 # third party libraries
 LDLIBS += $(BOOSTLIBS) $(ROOTLIBS)
 
-# dependencies for executable
-DEPS = data/bedmap2_bin
+# other dependencies for executable
+BINDEPS = data/bedmap2_bin
 
 # name the phony's just to be safe
 .PHONY: all clean test
 
 # set the primary target
-all: $(BIN_DIR)/$(BIN) $(DEPS)
+all: $(BIN_DIR)/$(BIN) $(DEPS) $(BINDEPS)
 
 # and the test target
-test: $(TESTBIN) $(DEPS)
+test: $(TESTBIN) $(DEPS) $(BINDEPS)
 
 # dependencies for bin - everything comes from here
 # LDFLAGS must come BEFORE LDLIBS - this is linking ONLY
@@ -77,9 +84,12 @@ $(BIN_DIR)/$(BIN): $(OBJ)
 $(TESTBIN): $(TEST_OBJ) $(filter-out $(OBJ_DIR)/$(BIN).o, $(OBJ))
 	$(CXX) $(LDFLAGS) $^ $(LDLIBS) -o $@
 
+# include the generated dependency files
+-include $(DEPS)
+
 # we provide a rule to compile the objects
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.cpp
-	$(CXX) $(CPPFLAGS) $(CFLAGS) -c $< -o $@
+	$(CXX) $(CPPFLAGS) $(CFLAGS) -c $< $(OUTPUT_OPTS) $@
 
 # we provide a rule to compile the objects
 $(OBJ_DIR)/%.o: $(TEST_DIR)/%.cpp
@@ -95,5 +105,5 @@ data/bedmap2_bin.zip:
 
 # delete all objects, binaries, and test results
 clean:
-	rm -rf $(OBJ) $(TEST_OBJ) $(BIN) $(TESTBIN) obj/lib/*.o test/output/*
+	rm -rf $(OBJ) $(DEPS) $(TEST_OBJ) $(BIN) $(TESTBIN) obj/lib/*.o test/output/*
 
