@@ -56,6 +56,11 @@ namespace anita {
         // generate a random surface direction centered at the given location
         SphericalCoordinate getRandomSurfaceDirection(const SphericalCoordinate location) const;
 
+        ///
+        /// \brief Get value of WGS84 ellipsoid at a given theta
+        ///
+        inline double getEarthRadius(const double theta) const;
+
     private:
 
         // instance of BEDMAP2 data class

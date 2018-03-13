@@ -71,10 +71,13 @@ BINDEPS = data/bedmap2_bin
 .PHONY: all clean test
 
 # set the primary target
-all: $(BIN_DIR)/$(BIN) $(DEPS) $(BINDEPS)
+all: $(BIN_DIR)/$(BIN) $(BINDEPS)
 
 # and the test target
-test: $(TESTBIN) $(DEPS) $(BINDEPS)
+test: $(TESTBIN) $(BINDEPS)
+
+# include the generated dependency files
+-include $(DEPS)
 
 # dependencies for bin - everything comes from here
 # LDFLAGS must come BEFORE LDLIBS - this is linking ONLY
@@ -83,9 +86,6 @@ $(BIN_DIR)/$(BIN): $(OBJ)
 
 $(TESTBIN): $(TEST_OBJ) $(filter-out $(OBJ_DIR)/$(BIN).o, $(OBJ))
 	$(CXX) $(LDFLAGS) $^ $(LDLIBS) -o $@
-
-# include the generated dependency files
--include $(DEPS)
 
 # we provide a rule to compile the objects
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.cpp
