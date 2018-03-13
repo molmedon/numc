@@ -1,4 +1,6 @@
+#include <math.h>
 #include <string>
+#include <tuple>
 #include <fstream>
 #include <iostream>
 #include <NuMC.hpp>
@@ -13,9 +15,12 @@ Bedmap::~Bedmap() {
 
     // we have to free any allocate BEDMAP2 data files
     delete[] this->surface;
-    delete[] this->thickness;
+    delete[] this->bed;
     delete[] this->icemask;
+    delete[] this->thickness;
+    delete[] this->gl04c_to_wgs;
 }
+
 
 float* Bedmap::readBedmapData(std::string filename) const {
     // this function allocates a sufficient amount of memory, reads the binary data
@@ -36,7 +41,8 @@ float* Bedmap::readBedmapData(std::string filename) const {
     const long int length = ftell(file);
     rewind(file);
     if (length != 4*this->ncols*this->nrows) { // 32-bit/4-byte floats per element
-        std::cerr << "BEDMAP2 data files do not meet specifications. Quitting..." << std::endl;
+        std::cerr << "BEDMAP2 data file " << filename << " does not meet specifications. Quitting..." << std::endl;
+        std::cerr << "Calculated length: " << length << " != Expected Length: " << 4*this->ncols*this->nrows << std::endl;
         throw std::exception();
     }
 
@@ -55,80 +61,178 @@ float* Bedmap::readBedmapData(std::string filename) const {
     // and we can now close the file
     fclose(file);
 
+    // this should probably be done while reading in the file
+    // but for now, loop over the array and set all -9999.0 to NaN's
+    // so we can detect when we accidentally use NaN's in calculations
+    // we don't care about NaN-hitting performance because we should NEVER
+    // be operating on NaN's
+    for (int i = 0; i < this->ncols*this->nrows; i++) {
+        if (_data[i] < -9990.0)
+            _data[i] = std::numeric_limits<float>::quiet_NaN();
+    }
+
     // and return the data back to the caller
     return _data;
 
 }
 
-__attribute__((hot)) inline std::pair<int, int> Bedmap::coordToBEDMAPIndices(const double theta, const double phi) const {
+
+std::pair<double, double> Bedmap::coordToBEDMAPLocation(const double lat, const double lon) const {
     // Uses "Map Projections - A Working Manual" by J.P Snyder" https://pubs.usgs.gov/pp/1395/report.pdf
     // Stereographic Projections - starting pg. 154. Numerical example on pg. 315
+    // All page and equation numbers refer to Snyder
     // IceMC version is icemodel.cc:L1122
 
-    // compute t for this theta
-    const double t0 = (1 - sin(theta))/(1 + sin(theta)); // used to calculate TC
-    const double t1 = (1 + EARTH_E*sin(theta))/(1 - EARTH_E*sin(theta)); // used to calculate TC
-    const double t = sqrt(tc0*pow(tc1, EARTH_E));
+    // Pg. 161, Eq. 15-9
+    const double t = tan(PI/4 + lat/2)/pow( (1 - EARTH_E*sin(-lat))/(1 + EARTH_E*sin(-lat)), EARTH_E/2.);
 
-    // compute m
-    const double m = cos(theta)/sqrt(1 - EARTH_E*EARTH_E*sin(theta)*sin(theta));
+    // we use t, and EARTH_A, T_C and M_C to compute p
+    // the factor is precomputed in Constants.h
+    const double p = t*AMTC;
 
-    // we use m, t to compute p
-    const double p = t*(EARTH_A*M_C/T_C);
+    // and then we can use p to find x, y relative to 0 degrees east
+    // these are in km relative to center of Bedmap2 grid
+    const double x = -p*sin(-lon);
+    const double y = p*cos(-lon);
 
-    // and then we can use p to find x, y
-    const double x = p*sin(phi - PI/2); // reference to y-axis
-    const double y = -p*cos(phi - PI/2);
-
-    // and then convert these into indices
-    int xi = static_cast<int>(std::round((x - this->xllcorner)/this->cellsize));
-    int yi = static_cast<int>(std::round((-y - this->yllcorner)/this->cellsize));
-
-    // clamp the values to the ncols/nrows range provided by the file
-    // xi = utils::clamp(xi, 0, this->ncols);
-    // yi = utils::clamp(yi, 0, this->nrows);
+    // quick check to make sure that we are within the bedmap zone
+    if ((x < this->xllcorner) || (x > -this->xllcorner) || (y < this->yllcorner) || (y > -this->yllcorner)) {
+        std::cerr << "Converting (" << lat << ", " << lon << ") to BEDMAP coordinates "
+                  << "gives out-of-range values (" << x << ", " << y << "). Quitting..." << std::endl;
+        throw std::exception();
+    }
 
     // and make a pair
-    return std::make_pair(xi, yi);
+    return std::make_pair(x, y);
 
 }
 
 
-// get the surface ice elevation/radius (in km) at a given theta/phi (radians)
-double Bedmap::getSurfaceElevation(const double theta, const double phi) const {
+// get the surface ice elevation/radius (in m) relative to WGS84 ellipsoid at a given lat/lon (radians)
+double Bedmap::getSurfaceElevation(const double lat, const double lon) const {
 
-    // get the correct index
-    std::pair<int, int> idx = coordToBEDMAPIndices(theta, phi);
+    // get the floating point location in the grid (in km)
+    std::pair<double, double> loc = coordToBEDMAPLocation(lat, lon);
 
-    // and return the value indexed into the 2D chunk of contiguous memory
-    return static_cast<float>(this->surface[idx.first*this->nrows + idx.second]);
+    // return the bedmap surface elevation at the x,y point
+    return this->getSurfaceElevationAtPoint(loc.first, loc.second);
+
 }
 
 
-// get the thickness of the ice (in km) at a given theta/phi (radians)
-double Bedmap::getIceThickness(const double theta, const double phi) const {
+// get the surface elevation/radius (in m) at a given (x,y) in BEDMAP coordinates (km)
+double Bedmap::getSurfaceElevationAtPoint(const double x, const double y) const {
 
-    // get the correct index
-    std::pair<int, int> idx = coordToBEDMAPIndices(theta, phi);
+    // bilinear interpolate data (returns EIGEN-GL04C) and then add conversion to WGS84
+    return interpData(this->surface, x, y) + interpData(this->gl04c_to_wgs, x, y);
 
-    // and return the value indexed into the 2D chunk of contiguous memory
-    return static_cast<double>(this->thickness[idx.first*this->nrows + idx.second]);
 }
 
 
-// get the depth of the rock/ice boundary (in km) at a given theta/phi (radians)
-double Bedmap::getRockDepth(const double theta, const double phi) const {
+// get the thickness of the ice (in m) at a given lat/lon (radians)
+double Bedmap::getIceThickness(const double lat, const double lon) const {
 
-    // get the correct index
-    std::pair<int, int> idx = coordToBEDMAPIndices(theta, phi);
+    // get the floating point location in the grid (in km)
+    std::pair<double, double> loc = coordToBEDMAPLocation(lat, lon);
 
-    // get the surface elevation
-    double surface_elevation = this->getSurfaceElevation(theta, phi);
+    // return the bedmap ice elevation at the x,y point
+    return this->getIceThicknessAtPoint(loc.first, loc.second);
+}
 
-    // get the ice thickness
-    double ice_thickness = this->getIceThickness(theta, phi);
 
-    // and return the value indexed into the 2D chunk of contiguous memory
-    return surface_elevation - ice_thickness;
+// get the ice thickness (in m) at a given (x,y) in BEDMAP coordinates (km)
+double Bedmap::getIceThicknessAtPoint(const double x, const double y) const {
+
+    // bilinear interpolate data (returns EIGEN-GL04C) and then add conversion to WGS84
+    return this->interpData(this->thickness, x, y);
+}
+
+
+// get the radius of the rock/ice boundary (in m) at a given lat/lon (radians)
+double Bedmap::getBedDepth(const double lat, const double lon) const {
+
+    // get the floating point location in the grid (in km)
+    std::pair<double, double> loc = coordToBEDMAPLocation(lat, lon);
+
+    // return the bedmap ice elevation at the x,y point
+    return this->getBedDepthAtPoint(loc.first, loc.second);
+
+}
+
+// get the radius of the rock/ice boundary (in m) at a given lat/lon (radians)
+double Bedmap::getBedDepthAtPoint(const double x, const double y) const {
+
+    // bilinear interpolate data (returns EIGEN-GL04C) and then add conversion to WGS84
+    return this->interpData(this->bed, x, y) + interpData(this->gl04c_to_wgs, x, y);
+}
+
+
+// \brief Query BEDMAP2 icemask at a given lat,lon to identify valid data
+// 0 = grounded, 1 = ice shelf, 127 = ocean
+IceMask Bedmap::getIceMask(const double lat, const double lon) const {
+
+    // get the floating point location in the grid (in km)
+    std::pair<double, double> loc = coordToBEDMAPLocation(lat, lon);
+
+    // and return the ice mask at this point
+    return this->getIceMaskAtPoint(loc.first, loc.second);
+}
+
+
+// \brief Query BEDMAP2 icemask at a given lat,lon to identify valid data
+// 0 = grounded, 1 = ice shelf, 127 = ocean
+IceMask Bedmap::getIceMaskAtPoint(const double x, const double y) const {
+
+    // evaluate the mask at this point
+    const double mask = this->interpData(this->icemask, x, y);
+
+    // if we are closer to being grounded, we return grounded
+    if (mask < 1)
+        return IceMask::Grounded;
+
+    // we need to be conservative with the ice shelf since
+    // points that don't have ice values are NaN and will corrupt
+    // calculations using surfaceElevation
+    if (mask == 1)
+        return IceMask::IceShelf;
+
+    // otherwise we assume we are in ocean
+    return IceMask::Ocean;
+
+}
+
+
+// interpolate a function evaluated at the four points of a unit square to a point (x,y)
+double Bedmap::interpIndex2D(const std::tuple<double, double, double, double> f,
+                                    const std::pair<double, double> pos) const {
+
+    // we interpolate on a unit square of indicies assuming
+    // that the values of f are for the points (0, 0), (1, 0), (0, 1), (1, 1)
+    const double x = pos.first; const double y = pos.second;
+
+    // compute the bilinear interpolation
+    return std::get<0>(f)*(1 - x)*(1 - y) + std::get<1>(f)*x*(1 - y) + std::get<2>(f)*(1 - x)*y + std::get<3>(f)*x*y;
+}
+
+
+// interpolate between data points to evaluate `data` at a given x,y in BEDMAP coordinates (km)
+double Bedmap::interpData(const float *data, const double x, const double y) const {
+
+    // find the index corresponding to x and y
+    // we don't divide by cellsize since cellsize==1 for BEDMAP2 and division is "expensive"
+    const double xi = abs(x - this->xllcorner) - 0.5;
+    const double yi = abs(y + this->yllcorner) - 0.5;
+
+    // get the data table values at this location and store in a tuple
+    std::tuple<double, double, double, double> f;
+
+    // assign values
+    std::get<0>(f) = data[static_cast<int>(floor(yi)*this->ncols + floor(xi))];
+    std::get<1>(f) = data[static_cast<int>(floor(yi)*this->ncols + ceil(xi))];
+    std::get<2>(f) = data[static_cast<int>(ceil(yi)*this->ncols + floor(xi))];
+    std::get<3>(f) = data[static_cast<int>(ceil(yi)*this->ncols + ceil(xi))];
+
+    // interpolate in index space
+    return interpIndex2D(f, std::pair<double, double>(fmod(xi, 1), fmod(yi, 1)));
 
 }
