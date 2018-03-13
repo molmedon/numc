@@ -46,5 +46,5 @@ for i = 1:N
 end
 
 % and write to a file
-csvwrite('../../data/Bedmap_test_values.csv', data)
+csvwrite('Bedmap_test_values.csv', data)
 
