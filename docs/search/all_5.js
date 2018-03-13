@@ -1,5 +1,5 @@
 var searchData=
 [
-  ['lepton',['Lepton',['../classanita_1_1Lepton.html',1,'anita']]],
-  ['location',['location',['../structanita_1_1Interaction.html#ab27dcd7b555a77d30ac3f7e2c213ac64',1,'anita::Interaction']]]
+  ['flightdata',['FlightData',['../classanita_1_1readers_1_1FlightData.html',1,'anita::readers']]],
+  ['flux',['Flux',['../classanita_1_1readers_1_1Flux.html',1,'anita::readers']]]
 ];

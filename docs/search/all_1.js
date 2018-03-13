@@ -1,5 +1,4 @@
 var searchData=
 [
-  ['continent',['Continent',['../classanita_1_1Continent.html',1,'anita']]],
-  ['current',['current',['../structanita_1_1Interaction.html#a12fb75454d637ec53cc7040a32b94028',1,'anita::Interaction']]]
+  ['bedmap',['Bedmap',['../classanita_1_1readers_1_1Bedmap.html',1,'anita::readers::Bedmap'],['../classanita_1_1readers_1_1Bedmap.html#a9445397a82e718592c10cf821ee5fbef',1,'anita::readers::Bedmap::Bedmap()']]]
 ];

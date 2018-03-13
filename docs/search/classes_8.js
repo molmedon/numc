@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['sphericalcoordinate',['SphericalCoordinate',['../structanita_1_1SphericalCoordinate.html',1,'anita']]]
+  ['neutrino',['Neutrino',['../classanita_1_1Neutrino.html',1,'anita']]]
 ];

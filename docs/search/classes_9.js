@@ -1,5 +1,5 @@
 var searchData=
 [
-  ['tau',['Tau',['../classanita_1_1Tau.html',1,'anita']]],
-  ['tauneutrino',['TauNeutrino',['../classanita_1_1TauNeutrino.html',1,'anita']]]
+  ['particle',['Particle',['../classanita_1_1Particle.html',1,'anita']]],
+  ['propagator',['Propagator',['../classanita_1_1Propagator.html',1,'anita']]]
 ];
