@@ -17,7 +17,7 @@ TEST_OUTPUT_DIR = $(shell pwd)/test/output
 SRC_DIR = src
 OBJ_DIR = obj
 TEST_DIR = test
-DATA_DIR = $(shell pwd)/data
+DATA_DIR = $(shell pwd)/data/
 
 # a hash of the current src/include *.cpp files
 # this is saved into all output data files to verify the code
