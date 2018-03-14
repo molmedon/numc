@@ -84,16 +84,16 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:aecff02bbc29dc5fdec113cbc9d529ddb"><td class="memItemLeft" align="right" valign="top">std::map&lt; int, InteractionList &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classanita_1_1Propagator.html#aecff02bbc29dc5fdec113cbc9d529ddb">propagateParticles</a> (const int particlesToSimulate) const</td></tr>
 <tr class="memdesc:aecff02bbc29dc5fdec113cbc9d529ddb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Propagate a fixed number of particles through the Earth.  <a href="#aecff02bbc29dc5fdec113cbc9d529ddb">More...</a><br /></td></tr>
 <tr class="separator:aecff02bbc29dc5fdec113cbc9d529ddb"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab3a611316d8f8688c1b26a352f2b6ba7"><td class="memItemLeft" align="right" valign="top">InteractionList&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classanita_1_1Propagator.html#ab3a611316d8f8688c1b26a352f2b6ba7">propagate</a> (<a class="el" href="classanita_1_1Neutrino.html">Neutrino</a> particle) const</td></tr>
-<tr class="memdesc:ab3a611316d8f8688c1b26a352f2b6ba7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Propagate a single particle through the Earth recording all interactions.  <a href="#ab3a611316d8f8688c1b26a352f2b6ba7">More...</a><br /></td></tr>
-<tr class="separator:ab3a611316d8f8688c1b26a352f2b6ba7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afbc84c5193dec12d910d346309c3a508"><td class="memItemLeft" align="right" valign="top">InteractionList&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classanita_1_1Propagator.html#afbc84c5193dec12d910d346309c3a508">propagate</a> (<a class="el" href="classanita_1_1Neutrino.html">Neutrino</a> &amp;particle) const</td></tr>
+<tr class="memdesc:afbc84c5193dec12d910d346309c3a508"><td class="mdescLeft">&#160;</td><td class="mdescRight">Propagate a single particle through the Earth recording all interactions.  <a href="#afbc84c5193dec12d910d346309c3a508">More...</a><br /></td></tr>
+<tr class="separator:afbc84c5193dec12d910d346309c3a508"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aaa6a4b648b76ce83e46f003a1250e7fb"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classanita_1_1Propagator.html#aaa6a4b648b76ce83e46f003a1250e7fb">Propagator</a> (const <a class="el" href="classanita_1_1Continent.html">Continent</a> &amp;con, const std::string fluxname, const double fixedE, const double maxE, const double minE)</td></tr>
 <tr class="memdesc:aaa6a4b648b76ce83e46f003a1250e7fb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Construct a new propagator.  <a href="#aaa6a4b648b76ce83e46f003a1250e7fb">More...</a><br /></td></tr>
 <tr class="separator:aaa6a4b648b76ce83e46f003a1250e7fb"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>A class to handle the propagation of source neutrinos through the Earth. </p>
-<p>This class encapsulates all the necessary information for particle propagation, including a <a class="el" href="classanita_1_1Continent.html">Continent</a> representation, source neutrino flux model, and min/max energy cuts. Methods provided by this class allow for generating a random set of neutrino flavors and propagating them through the Earth, tracking a list of all the interactions that each neutrino undergoes during propagation. </p>
+<p>This class encapsulates all the necessary information for particle propagation, including a <a class="el" href="classanita_1_1Continent.html" title="Represents the continent of Antarctica and all Earth-related values. ">Continent</a> representation, source neutrino flux model, and min/max energy cuts. Methods provided by this class allow for generating a random set of neutrino flavors and propagating them through the Earth, tracking a list of all the interactions that each neutrino undergoes during propagation. </p>
 
 <p class="definition">Definition at line <a class="el" href="Propagator_8hpp_source.html#l00062">62</a> of file <a class="el" href="Propagator_8hpp_source.html">Propagator.hpp</a>.</p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
@@ -150,10 +150,10 @@ Public Member Functions</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Construct a new propagator. </p>
-<p>Construct a new propagator, loading all necessary data tables and cross sections, but uses a pre-constructed <a class="el" href="classanita_1_1Continent.html">Continent</a> object.</p>
+<p>Construct a new propagator, loading all necessary data tables and cross sections, but uses a pre-constructed <a class="el" href="classanita_1_1Continent.html" title="Represents the continent of Antarctica and all Earth-related values. ">Continent</a> object.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">con</td><td>An initialized <a class="el" href="classanita_1_1Continent.html">Continent</a> object </td></tr>
+    <tr><td class="paramname">con</td><td>An initialized <a class="el" href="classanita_1_1Continent.html" title="Represents the continent of Antarctica and all Earth-related values. ">Continent</a> object </td></tr>
     <tr><td class="paramname">fluxname</td><td>A string corresponding to a filename in data/flux which contains the desired source neutrino model </td></tr>
     <tr><td class="paramname">fixedE</td><td>If <code>fluxname</code>=='fixed', then <code>fixedE</code> will contain the energy used for all neutrinos (in log10(eV) units) </td></tr>
     <tr><td class="paramname">maxE</td><td>The maximum energy above which particles are not generated </td></tr>
@@ -167,8 +167,8 @@ Public Member Functions</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
-<a id="ab3a611316d8f8688c1b26a352f2b6ba7"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ab3a611316d8f8688c1b26a352f2b6ba7">&#9670;&nbsp;</a></span>propagate()</h2>
+<a id="afbc84c5193dec12d910d346309c3a508"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#afbc84c5193dec12d910d346309c3a508">&#9670;&nbsp;</a></span>propagate()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -176,7 +176,7 @@ Public Member Functions</h2></td></tr>
         <tr>
           <td class="memname">InteractionList Propagator::propagate </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="classanita_1_1Neutrino.html">Neutrino</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="classanita_1_1Neutrino.html">Neutrino</a> &amp;&#160;</td>
           <td class="paramname"><em>particle</em></td><td>)</td>
           <td> const</td>
         </tr>
@@ -187,12 +187,12 @@ Public Member Functions</h2></td></tr>
 <p>For each input neutrino, we pick a random exit location and random exit direction and back-calculate the source location and direction. The source neutrino is then propagated through the Earth, returning a vector of all the interactions it undergoes (NC and CC) during its propagation.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">particle</td><td>The <a class="el" href="classanita_1_1Neutrino.html">Neutrino</a> to propagate through the Earth. </td></tr>
+    <tr><td class="paramname">particle</td><td>The <a class="el" href="classanita_1_1Neutrino.html" title="Abstract class representing a neutrino. ">Neutrino</a> to propagate through the Earth. </td></tr>
   </table>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="Propagator_8cpp_source.html#l00042">42</a> of file <a class="el" href="Propagator_8cpp_source.html">Propagator.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Propagator_8cpp_source.html#l00045">45</a> of file <a class="el" href="Propagator_8cpp_source.html">Propagator.cpp</a>.</p>
 
 </div>
 </div>
@@ -213,7 +213,7 @@ Public Member Functions</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Propagate a fixed number of particles through the Earth. </p>
-<p>propagateParticles takes as argument the number of neutrinos to simulate; it then loops, randomly generating neutrino flavors and energies from the source model. For each generated neutrino, it calls this-&gt;<a class="el" href="classanita_1_1Propagator.html#ab3a611316d8f8688c1b26a352f2b6ba7" title="Propagate a single particle through the Earth recording all interactions. ">propagate()</a> to simulate the interactions of that neutrino. The keys of each map correspond to each source neutrino</p>
+<p>propagateParticles takes as argument the number of neutrinos to simulate; it then loops, randomly generating neutrino flavors and energies from the source model. For each generated neutrino, it calls this-&gt;<a class="el" href="classanita_1_1Propagator.html#afbc84c5193dec12d910d346309c3a508" title="Propagate a single particle through the Earth recording all interactions. ">propagate()</a> to simulate the interactions of that neutrino. The keys of each map correspond to each source neutrino</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">particlesToSimulate</td><td>The number of neutrinos to propagate through the Earth. </td></tr>

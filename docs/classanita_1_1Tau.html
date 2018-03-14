@@ -68,68 +68,76 @@ $(function() {
 <div class="header">
   <div class="summary">
 <a href="#pub-methods">Public Member Functions</a> &#124;
-<a href="#pub-static-methods">Static Public Member Functions</a> &#124;
 <a href="classanita_1_1Tau-members.html">List of all members</a>  </div>
   <div class="headertitle">
 <div class="title">anita::Tau Class Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
+
+<p>Construct a <a class="el" href="classanita_1_1Tau.html" title="Construct a Tau with energy E in log10(eV) units. ">Tau</a> with energy <code>E</code> in log10(eV) units.  
+ <a href="classanita_1_1Tau.html#details">More...</a></p>
+
+<p><code>#include &lt;<a class="el" href="Lepton_8hpp_source.html">Lepton.hpp</a>&gt;</code></p>
 <div class="dynheader">
 Inheritance diagram for anita::Tau:</div>
 <div class="dyncontent">
  <div class="center">
   <img src="classanita_1_1Tau.png" usemap="#anita::Tau_map" alt=""/>
   <map id="anita::Tau_map" name="anita::Tau_map">
-<area href="classanita_1_1Lepton.html" alt="anita::Lepton" shape="rect" coords="0,56,88,80"/>
-<area href="classanita_1_1Particle.html" alt="anita::Particle" shape="rect" coords="0,0,88,24"/>
+<area href="classanita_1_1Lepton.html" title="An abstract class representing a general lepton. " alt="anita::Lepton" shape="rect" coords="0,56,88,80"/>
+<area href="classanita_1_1Particle.html" title="Abstract class representing a general particle - neutrino or lepton. " alt="anita::Particle" shape="rect" coords="0,0,88,24"/>
 </map>
  </div></div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
 <tr class="memitem:a2bcae101dea45410b21dbab550a13572"><td class="memItemLeft" align="right" valign="top"><a id="a2bcae101dea45410b21dbab550a13572"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><b>Tau</b> (double E)</td></tr>
+&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classanita_1_1Tau.html#a2bcae101dea45410b21dbab550a13572">Tau</a> (double E)</td></tr>
+<tr class="memdesc:a2bcae101dea45410b21dbab550a13572"><td class="mdescLeft">&#160;</td><td class="mdescRight">Construct a <a class="el" href="classanita_1_1Tau.html" title="Construct a Tau with energy E in log10(eV) units. ">Tau</a> with energy <code>E</code> in log10(eV) units. <br /></td></tr>
 <tr class="separator:a2bcae101dea45410b21dbab550a13572"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a33c93fbde48978b5d1cf3774c0e1c582"><td class="memItemLeft" align="right" valign="top"><a id="a33c93fbde48978b5d1cf3774c0e1c582"></a>
+double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classanita_1_1Tau.html#a33c93fbde48978b5d1cf3774c0e1c582">getEnergyLoss</a> () const override</td></tr>
+<tr class="memdesc:a33c93fbde48978b5d1cf3774c0e1c582"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the energy loss, dE/dX, in GeV cm^2/g. <br /></td></tr>
+<tr class="separator:a33c93fbde48978b5d1cf3774c0e1c582"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0f142cc6b1a1eb7c130d7ddaa9656120"><td class="memItemLeft" align="right" valign="top"><a id="a0f142cc6b1a1eb7c130d7ddaa9656120"></a>
+std::pair&lt; double, InteractionType &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classanita_1_1Tau.html#a0f142cc6b1a1eb7c130d7ddaa9656120">getInteractionLength</a> (const double density) const override</td></tr>
+<tr class="memdesc:a0f142cc6b1a1eb7c130d7ddaa9656120"><td class="mdescLeft">&#160;</td><td class="mdescRight">Compute the interaction length at a density in g/cm^3 and return the interaction length/type. <br /></td></tr>
+<tr class="separator:a0f142cc6b1a1eb7c130d7ddaa9656120"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a017b22d1ea6476b139c5296f00540899"><td class="memItemLeft" align="right" valign="top"><a id="a017b22d1ea6476b139c5296f00540899"></a>
+std::unique_ptr&lt; <a class="el" href="classanita_1_1Particle.html">Particle</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classanita_1_1Tau.html#a017b22d1ea6476b139c5296f00540899">getInteractionProducts</a> (const InteractionType interaction) const override</td></tr>
+<tr class="memdesc:a017b22d1ea6476b139c5296f00540899"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return the primary particle from a lepton interaction. <br /></td></tr>
+<tr class="separator:a017b22d1ea6476b139c5296f00540899"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pub_methods_classanita_1_1Lepton"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_classanita_1_1Lepton')"><img src="closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="classanita_1_1Lepton.html">anita::Lepton</a></td></tr>
-<tr class="memitem:ac6c9c112921c8fdd31e2a5e36880649d inherit pub_methods_classanita_1_1Lepton"><td class="memItemLeft" align="right" valign="top"><a id="ac6c9c112921c8fdd31e2a5e36880649d"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><b>Lepton</b> (double E)</td></tr>
-<tr class="separator:ac6c9c112921c8fdd31e2a5e36880649d inherit pub_methods_classanita_1_1Lepton"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a31b44004d643fb71801372310fdf3d14 inherit pub_methods_classanita_1_1Lepton"><td class="memItemLeft" align="right" valign="top"><a id="a31b44004d643fb71801372310fdf3d14"></a>
-<a class="el" href="classanita_1_1Particle.html">Particle</a>&#160;</td><td class="memItemRight" valign="bottom"><b>getInteractionProducts</b> (const Current current) const</td></tr>
-<tr class="separator:a31b44004d643fb71801372310fdf3d14 inherit pub_methods_classanita_1_1Lepton"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad958ec6fc12a169348d6554de7c4d51c inherit pub_methods_classanita_1_1Lepton"><td class="memItemLeft" align="right" valign="top"><a id="ad958ec6fc12a169348d6554de7c4d51c"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classanita_1_1Lepton.html#ad958ec6fc12a169348d6554de7c4d51c">Lepton</a> (double E, Flavor flv)</td></tr>
+<tr class="memdesc:ad958ec6fc12a169348d6554de7c4d51c inherit pub_methods_classanita_1_1Lepton"><td class="mdescLeft">&#160;</td><td class="mdescRight">Construct a lepton of given energy <code>E</code> (in log10(eV) units) and flavor <code>flv</code> <br /></td></tr>
+<tr class="separator:ad958ec6fc12a169348d6554de7c4d51c inherit pub_methods_classanita_1_1Lepton"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pub_methods_classanita_1_1Particle"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_classanita_1_1Particle')"><img src="closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="classanita_1_1Particle.html">anita::Particle</a></td></tr>
-<tr class="memitem:a48e43bfa726fb937f177288310bba498 inherit pub_methods_classanita_1_1Particle"><td class="memItemLeft" align="right" valign="top"><a id="a48e43bfa726fb937f177288310bba498"></a>
-virtual double&#160;</td><td class="memItemRight" valign="bottom"><b>getCrossSection</b> (const Current current) const</td></tr>
-<tr class="separator:a48e43bfa726fb937f177288310bba498 inherit pub_methods_classanita_1_1Particle"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a2f3048c3f4142162a8185fe5edcb3036 inherit pub_methods_classanita_1_1Particle"><td class="memItemLeft" align="right" valign="top"><a id="a2f3048c3f4142162a8185fe5edcb3036"></a>
-virtual double&#160;</td><td class="memItemRight" valign="bottom"><b>getYFactor</b> (const Current current) const</td></tr>
-<tr class="separator:a2f3048c3f4142162a8185fe5edcb3036 inherit pub_methods_classanita_1_1Particle"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a980cb1e8af5322534544f1e1f6d541d8 inherit pub_methods_classanita_1_1Particle"><td class="memItemLeft" align="right" valign="top"><a id="a980cb1e8af5322534544f1e1f6d541d8"></a>
-std::pair&lt; double, Current &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>getInteractionLength</b> (const double density) const</td></tr>
-<tr class="separator:a980cb1e8af5322534544f1e1f6d541d8 inherit pub_methods_classanita_1_1Particle"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a2786e5c915c70c6d81c4802850911a63 inherit pub_methods_classanita_1_1Particle"><td class="memItemLeft" align="right" valign="top"><a id="a2786e5c915c70c6d81c4802850911a63"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><b>Particle</b> (double E)</td></tr>
-<tr class="separator:a2786e5c915c70c6d81c4802850911a63 inherit pub_methods_classanita_1_1Particle"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-methods"></a>
-Static Public Member Functions</h2></td></tr>
-<tr class="memitem:a970a1ede6e708ad222029ab616c5f7c6"><td class="memItemLeft" align="right" valign="top"><a id="a970a1ede6e708ad222029ab616c5f7c6"></a>
-static const <a class="el" href="classanita_1_1readers_1_1YTable.html">readers::YTable</a>&#160;</td><td class="memItemRight" valign="bottom"><b>decayTable</b> ()</td></tr>
-<tr class="separator:a970a1ede6e708ad222029ab616c5f7c6"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="inherited"></a>
-Additional Inherited Members</h2></td></tr>
-<tr class="inherit_header pub_attribs_classanita_1_1Particle"><td colspan="2" onclick="javascript:toggleInherit('pub_attribs_classanita_1_1Particle')"><img src="closed.png" alt="-"/>&#160;Public Attributes inherited from <a class="el" href="classanita_1_1Particle.html">anita::Particle</a></td></tr>
-<tr class="memitem:ac4932849e014c408d466bbda94a26286 inherit pub_attribs_classanita_1_1Particle"><td class="memItemLeft" align="right" valign="top"><a id="ac4932849e014c408d466bbda94a26286"></a>
-double&#160;</td><td class="memItemRight" valign="bottom"><b>energy</b></td></tr>
-<tr class="separator:ac4932849e014c408d466bbda94a26286 inherit pub_attribs_classanita_1_1Particle"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6f8ab36fcc4cb0e6ca4e9615965569c7 inherit pub_attribs_classanita_1_1Particle"><td class="memItemLeft" align="right" valign="top"><a id="a6f8ab36fcc4cb0e6ca4e9615965569c7"></a>
-bool&#160;</td><td class="memItemRight" valign="bottom"><b>isLepton</b></td></tr>
-<tr class="separator:a6f8ab36fcc4cb0e6ca4e9615965569c7 inherit pub_attribs_classanita_1_1Particle"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad2f3d841b9c9a250e3dac1987b8552e8 inherit pub_methods_classanita_1_1Particle"><td class="memItemLeft" align="right" valign="top"><a id="ad2f3d841b9c9a250e3dac1987b8552e8"></a>
+double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classanita_1_1Particle.html#ad2f3d841b9c9a250e3dac1987b8552e8">getEnergy</a> () const</td></tr>
+<tr class="memdesc:ad2f3d841b9c9a250e3dac1987b8552e8 inherit pub_methods_classanita_1_1Particle"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the energy of the particle in log10(eV) units. <br /></td></tr>
+<tr class="separator:ad2f3d841b9c9a250e3dac1987b8552e8 inherit pub_methods_classanita_1_1Particle"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afc78f3532abf99b904bc9f3ea7a92fb7 inherit pub_methods_classanita_1_1Particle"><td class="memItemLeft" align="right" valign="top"><a id="afc78f3532abf99b904bc9f3ea7a92fb7"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classanita_1_1Particle.html#afc78f3532abf99b904bc9f3ea7a92fb7">setEnergy</a> (const double E)</td></tr>
+<tr class="memdesc:afc78f3532abf99b904bc9f3ea7a92fb7 inherit pub_methods_classanita_1_1Particle"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set the energy of the particle in log10(eV) units. <br /></td></tr>
+<tr class="separator:afc78f3532abf99b904bc9f3ea7a92fb7 inherit pub_methods_classanita_1_1Particle"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7047ddc40b913e4f9b780cac53e19e5b inherit pub_methods_classanita_1_1Particle"><td class="memItemLeft" align="right" valign="top"><a id="a7047ddc40b913e4f9b780cac53e19e5b"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classanita_1_1Particle.html#a7047ddc40b913e4f9b780cac53e19e5b">isNeutrino</a> ()</td></tr>
+<tr class="memdesc:a7047ddc40b913e4f9b780cac53e19e5b inherit pub_methods_classanita_1_1Particle"><td class="mdescLeft">&#160;</td><td class="mdescRight">Flag indicating whether particle is neutrino. <br /></td></tr>
+<tr class="separator:a7047ddc40b913e4f9b780cac53e19e5b inherit pub_methods_classanita_1_1Particle"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a53e158aa111b166e767fdfffe79e0c41 inherit pub_methods_classanita_1_1Particle"><td class="memItemLeft" align="right" valign="top"><a id="a53e158aa111b166e767fdfffe79e0c41"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classanita_1_1Particle.html#a53e158aa111b166e767fdfffe79e0c41">isLepton</a> ()</td></tr>
+<tr class="memdesc:a53e158aa111b166e767fdfffe79e0c41 inherit pub_methods_classanita_1_1Particle"><td class="mdescLeft">&#160;</td><td class="mdescRight">Flag indicating whether particle is neutrino. <br /></td></tr>
+<tr class="separator:a53e158aa111b166e767fdfffe79e0c41 inherit pub_methods_classanita_1_1Particle"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abd132c141076eca6bbebe384be3036b6 inherit pub_methods_classanita_1_1Particle"><td class="memItemLeft" align="right" valign="top"><a id="abd132c141076eca6bbebe384be3036b6"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classanita_1_1Particle.html#abd132c141076eca6bbebe384be3036b6">Particle</a> (const double E, const bool _neutrino)</td></tr>
+<tr class="memdesc:abd132c141076eca6bbebe384be3036b6 inherit pub_methods_classanita_1_1Particle"><td class="mdescLeft">&#160;</td><td class="mdescRight">Construct a new <a class="el" href="classanita_1_1Particle.html" title="Abstract class representing a general particle - neutrino or lepton. ">Particle</a> with an energy given in log10(eV) <br /></td></tr>
+<tr class="separator:abd132c141076eca6bbebe384be3036b6 inherit pub_methods_classanita_1_1Particle"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock">
-<p class="definition">Definition at line <a class="el" href="Lepton_8hpp_source.html#l00052">52</a> of file <a class="el" href="Lepton_8hpp_source.html">Lepton.hpp</a>.</p>
+<div class="textblock"><p>Construct a <a class="el" href="classanita_1_1Tau.html" title="Construct a Tau with energy E in log10(eV) units. ">Tau</a> with energy <code>E</code> in log10(eV) units. </p>
+
+<p class="definition">Definition at line <a class="el" href="Lepton_8hpp_source.html#l00106">106</a> of file <a class="el" href="Lepton_8hpp_source.html">Lepton.hpp</a>.</p>
 </div><hr/>The documentation for this class was generated from the following file:<ul>
 <li>include/<a class="el" href="Lepton_8hpp_source.html">Lepton.hpp</a></li>
 </ul>

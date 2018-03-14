@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['particle',['particle',['../structanita_1_1Interaction.html#a160872b64756074e2866221c69d25f86',1,'anita::Interaction']]]
+  ['max_5fradius',['max_radius',['../classanita_1_1readers_1_1Earth.html#ad266aa8c162d3a4dabe9eec8f60d2ca1',1,'anita::readers::Earth']]]
 ];

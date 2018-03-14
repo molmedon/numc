@@ -1,7 +1,6 @@
 var searchData=
 [
-  ['table',['Table',['../classanita_1_1readers_1_1Table.html',1,'anita::readers']]],
-  ['tau',['Tau',['../classanita_1_1Tau.html',1,'anita']]],
-  ['tauneutrino',['TauNeutrino',['../classanita_1_1TauNeutrino.html',1,'anita']]],
-  ['trials',['trials',['../structanita_1_1Interaction.html#a29d66384747cb92194f08e6486452914',1,'anita::Interaction']]]
+  ['setcrosssectionmodel',['setCrossSectionModel',['../classanita_1_1Neutrino.html#a6bb9c5babd0efb95cb60d01b396c756c',1,'anita::Neutrino']]],
+  ['setenergy',['setEnergy',['../classanita_1_1Particle.html#afc78f3532abf99b904bc9f3ea7a92fb7',1,'anita::Particle']]],
+  ['sphericalcoordinate',['SphericalCoordinate',['../structanita_1_1SphericalCoordinate.html',1,'anita::SphericalCoordinate'],['../structanita_1_1SphericalCoordinate.html#a2683825e1672860bad060a0b918ae33e',1,'anita::SphericalCoordinate::SphericalCoordinate()'],['../structanita_1_1SphericalCoordinate.html#a998a0a65f32ff4e6a7189a809ddcd02a',1,'anita::SphericalCoordinate::SphericalCoordinate(const double t, const double p, const double R)']]]
 ];

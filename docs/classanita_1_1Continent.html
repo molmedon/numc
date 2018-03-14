@@ -73,52 +73,79 @@ $(function() {
 <div class="title">anita::Continent Class Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
+
+<p>Represents the continent of Antarctica and all Earth-related values.  
+ <a href="classanita_1_1Continent.html#details">More...</a></p>
+
+<p><code>#include &lt;<a class="el" href="Continent_8hpp_source.html">Continent.hpp</a>&gt;</code></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:abe9665e624d8d77161bf4ea43c23cf3a"><td class="memItemLeft" align="right" valign="top"><a id="abe9665e624d8d77161bf4ea43c23cf3a"></a>
-double&#160;</td><td class="memItemRight" valign="bottom"><b>getSurfaceElevation</b> (const double lat, const double lon) const</td></tr>
-<tr class="separator:abe9665e624d8d77161bf4ea43c23cf3a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a02a05f9c72976e323badcc2a48e31b56"><td class="memItemLeft" align="right" valign="top"><a id="a02a05f9c72976e323badcc2a48e31b56"></a>
-double&#160;</td><td class="memItemRight" valign="bottom"><b>getIceThickness</b> (const double lat, const double lon) const</td></tr>
-<tr class="separator:a02a05f9c72976e323badcc2a48e31b56"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a83ea81c9003696056693ae48af058ddb"><td class="memItemLeft" align="right" valign="top"><a id="a83ea81c9003696056693ae48af058ddb"></a>
-double&#160;</td><td class="memItemRight" valign="bottom"><b>getRockDepth</b> (const double lat, const double lon) const</td></tr>
-<tr class="separator:a83ea81c9003696056693ae48af058ddb"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a749881a9365f8ac361b2404b4150e45a"><td class="memItemLeft" align="right" valign="top"><a id="a749881a9365f8ac361b2404b4150e45a"></a>
-Material&#160;</td><td class="memItemRight" valign="bottom"><b>getMaterial</b> (const double lat, const double lon, const double radius) const</td></tr>
-<tr class="separator:a749881a9365f8ac361b2404b4150e45a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af1d3f8f0a180fa3513ce2c2804d85739"><td class="memItemLeft" align="right" valign="top"><a id="af1d3f8f0a180fa3513ce2c2804d85739"></a>
-double&#160;</td><td class="memItemRight" valign="bottom"><b>getDensity</b> (const double lat, const double lon, const double radius) const</td></tr>
-<tr class="separator:af1d3f8f0a180fa3513ce2c2804d85739"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac5efa2535e8c7f59b2c15665ca726db1"><td class="memItemLeft" align="right" valign="top"><a id="ac5efa2535e8c7f59b2c15665ca726db1"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classanita_1_1Continent.html#ac5efa2535e8c7f59b2c15665ca726db1">Continent</a> ()</td></tr>
+<tr class="memdesc:ac5efa2535e8c7f59b2c15665ca726db1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Construct a new <a class="el" href="classanita_1_1Continent.html" title="Represents the continent of Antarctica and all Earth-related values. ">Continent</a> object, loading all necessary data files. <br /></td></tr>
+<tr class="separator:ac5efa2535e8c7f59b2c15665ca726db1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aba6a7e4eaa79ee8742ad16e4de1e5cb4"><td class="memItemLeft" align="right" valign="top"><a id="aba6a7e4eaa79ee8742ad16e4de1e5cb4"></a>
+double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classanita_1_1Continent.html#aba6a7e4eaa79ee8742ad16e4de1e5cb4">getSurfaceElevation</a> (const double theta, const double phi) const</td></tr>
+<tr class="memdesc:aba6a7e4eaa79ee8742ad16e4de1e5cb4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the radius (in km) of the surface (ice, ocean, rock, etc.) at a theta/phi (radians) <br /></td></tr>
+<tr class="separator:aba6a7e4eaa79ee8742ad16e4de1e5cb4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a848e1bc9bd77a5152225696f8a9a1b91"><td class="memItemLeft" align="right" valign="top"><a id="a848e1bc9bd77a5152225696f8a9a1b91"></a>
+double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classanita_1_1Continent.html#a848e1bc9bd77a5152225696f8a9a1b91">getIceThickness</a> (const double theta, const double phi) const</td></tr>
+<tr class="memdesc:a848e1bc9bd77a5152225696f8a9a1b91"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the thickness of the ice (in km) at a given theta/phi (radians) <br /></td></tr>
+<tr class="separator:a848e1bc9bd77a5152225696f8a9a1b91"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa84082b467a73f37050dc8edffca7dbf"><td class="memItemLeft" align="right" valign="top"><a id="aa84082b467a73f37050dc8edffca7dbf"></a>
+double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classanita_1_1Continent.html#aa84082b467a73f37050dc8edffca7dbf">getBedRadius</a> (const double theta, const double phi) const</td></tr>
+<tr class="memdesc:aa84082b467a73f37050dc8edffca7dbf"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the radius of the rock bed (in km) at a given theta/phi (radians) <br /></td></tr>
+<tr class="separator:aa84082b467a73f37050dc8edffca7dbf"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4f1d27a2c64e796b70cb091ea5b6137e"><td class="memItemLeft" align="right" valign="top"><a id="a4f1d27a2c64e796b70cb091ea5b6137e"></a>
+Material&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classanita_1_1Continent.html#a4f1d27a2c64e796b70cb091ea5b6137e">getMaterial</a> (const double theta, const double phi, const double radius) const</td></tr>
+<tr class="memdesc:a4f1d27a2c64e796b70cb091ea5b6137e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the material at a given theta/phi (radians) and radius (in km) <br /></td></tr>
+<tr class="separator:a4f1d27a2c64e796b70cb091ea5b6137e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7727c4a3286f30f1d1e66a9243648a4d"><td class="memItemLeft" align="right" valign="top"><a id="a7727c4a3286f30f1d1e66a9243648a4d"></a>
+double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classanita_1_1Continent.html#a7727c4a3286f30f1d1e66a9243648a4d">getDensity</a> (const double theta, const double phi, const double radius) const</td></tr>
+<tr class="memdesc:a7727c4a3286f30f1d1e66a9243648a4d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the density in g/cm^3 at a given theta/phi (radians) and radius (in km) <br /></td></tr>
+<tr class="separator:a7727c4a3286f30f1d1e66a9243648a4d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a698dca7bcf5b4b90d8791d10da6022a2"><td class="memItemLeft" align="right" valign="top"><a id="a698dca7bcf5b4b90d8791d10da6022a2"></a>
-double&#160;</td><td class="memItemRight" valign="bottom"><b>getDensity</b> (const <a class="el" href="structanita_1_1SphericalCoordinate.html">SphericalCoordinate</a> coord) const</td></tr>
+double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classanita_1_1Continent.html#a698dca7bcf5b4b90d8791d10da6022a2">getDensity</a> (const <a class="el" href="structanita_1_1SphericalCoordinate.html">SphericalCoordinate</a> coord) const</td></tr>
+<tr class="memdesc:a698dca7bcf5b4b90d8791d10da6022a2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the density in g/cm^3 at a given spherical coordinate. <br /></td></tr>
 <tr class="separator:a698dca7bcf5b4b90d8791d10da6022a2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3c16e8dae325b3f5ea9876265f378f20"><td class="memItemLeft" align="right" valign="top"><a id="a3c16e8dae325b3f5ea9876265f378f20"></a>
+std::pair&lt; double, Material &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classanita_1_1Continent.html#a3c16e8dae325b3f5ea9876265f378f20">getDensityAndMaterial</a> (const double theta, const double phi, const double radius) const</td></tr>
+<tr class="memdesc:a3c16e8dae325b3f5ea9876265f378f20"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the density (in g/cm^3) and material at a given theta/phi (radians) and r (km) <br /></td></tr>
+<tr class="separator:a3c16e8dae325b3f5ea9876265f378f20"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9f6ef125947820f212a733e3d2929012"><td class="memItemLeft" align="right" valign="top"><a id="a9f6ef125947820f212a733e3d2929012"></a>
-std::pair&lt; double, Material &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>getDensityAndMaterial</b> (const <a class="el" href="structanita_1_1SphericalCoordinate.html">SphericalCoordinate</a> coord) const</td></tr>
+std::pair&lt; double, Material &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classanita_1_1Continent.html#a9f6ef125947820f212a733e3d2929012">getDensityAndMaterial</a> (const <a class="el" href="structanita_1_1SphericalCoordinate.html">SphericalCoordinate</a> coord) const</td></tr>
+<tr class="memdesc:a9f6ef125947820f212a733e3d2929012"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the density (in g/cm^3) and material at a given spherical coordinate. <br /></td></tr>
 <tr class="separator:a9f6ef125947820f212a733e3d2929012"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:affe32304b4c30175c6f33d53b547e51e"><td class="memItemLeft" align="right" valign="top"><a id="affe32304b4c30175c6f33d53b547e51e"></a>
-std::pair&lt; double, Material &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>getDensityAndMaterial</b> (const double lat, const double lon, const double radius) const</td></tr>
-<tr class="separator:affe32304b4c30175c6f33d53b547e51e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab5c4809ed74e893b6ae01c9d134803e6"><td class="memItemLeft" align="right" valign="top"><a id="ab5c4809ed74e893b6ae01c9d134803e6"></a>
-<a class="el" href="classanita_1_1Vector3.html">Vector3</a>&lt; double &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>getSurfaceSlope</b> (const double lat, const double lon) const</td></tr>
-<tr class="separator:ab5c4809ed74e893b6ae01c9d134803e6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac878db70e2e2bee2832f3dfa70808dd0"><td class="memItemLeft" align="right" valign="top"><a id="ac878db70e2e2bee2832f3dfa70808dd0"></a>
+<a class="el" href="classanita_1_1Vector3.html">Vector3</a>&lt; double &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classanita_1_1Continent.html#ac878db70e2e2bee2832f3dfa70808dd0">getSurfaceSlope</a> (const double theta, const double phi) const __attribute__((deprecated))</td></tr>
+<tr class="memdesc:ac878db70e2e2bee2832f3dfa70808dd0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the slope (units?) of the surface at a given theta/phi (radians) <br /></td></tr>
+<tr class="separator:ac878db70e2e2bee2832f3dfa70808dd0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:acfda9dd0285cef3124371b942c2c2795"><td class="memItemLeft" align="right" valign="top"><a id="acfda9dd0285cef3124371b942c2c2795"></a>
-<a class="el" href="structanita_1_1SphericalCoordinate.html">SphericalCoordinate</a>&#160;</td><td class="memItemRight" valign="bottom"><b>getRandomSurfacePoint</b> () const</td></tr>
+<a class="el" href="structanita_1_1SphericalCoordinate.html">SphericalCoordinate</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classanita_1_1Continent.html#acfda9dd0285cef3124371b942c2c2795">getRandomSurfacePoint</a> () const</td></tr>
+<tr class="memdesc:acfda9dd0285cef3124371b942c2c2795"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get a random point on the surface of the Earth below -60d latitude. <br /></td></tr>
 <tr class="separator:acfda9dd0285cef3124371b942c2c2795"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6b49c03c73be9b86366fea93a48d1440"><td class="memItemLeft" align="right" valign="top"><a id="a6b49c03c73be9b86366fea93a48d1440"></a>
-<a class="el" href="structanita_1_1SphericalCoordinate.html">SphericalCoordinate</a>&#160;</td><td class="memItemRight" valign="bottom"><b>getRandomSurfaceDirection</b> (const <a class="el" href="structanita_1_1SphericalCoordinate.html">SphericalCoordinate</a> location) const</td></tr>
-<tr class="separator:a6b49c03c73be9b86366fea93a48d1440"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a89fd8018b9cc338a5c2f9fff291639fa"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classanita_1_1Continent.html#a89fd8018b9cc338a5c2f9fff291639fa">getEarthRadius</a> (const double lat) const</td></tr>
-<tr class="memdesc:a89fd8018b9cc338a5c2f9fff291639fa"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get radius (in km) of WGS84 ellipsoid at a given latitude.  <a href="#a89fd8018b9cc338a5c2f9fff291639fa">More...</a><br /></td></tr>
-<tr class="separator:a89fd8018b9cc338a5c2f9fff291639fa"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae6b0fa43d35b5124faf1009ceec9b4d3"><td class="memItemLeft" align="right" valign="top"><a id="ae6b0fa43d35b5124faf1009ceec9b4d3"></a>
+<a class="el" href="structanita_1_1SphericalCoordinate.html">SphericalCoordinate</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classanita_1_1Continent.html#ae6b0fa43d35b5124faf1009ceec9b4d3">getRandomSurfaceDirection</a> () const</td></tr>
+<tr class="memdesc:ae6b0fa43d35b5124faf1009ceec9b4d3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get a random unit vector direction in spherical coordinates. <br /></td></tr>
+<tr class="separator:ae6b0fa43d35b5124faf1009ceec9b4d3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae316217c1dd7b11b3cc1803ffe8d636d"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classanita_1_1Continent.html#ae316217c1dd7b11b3cc1803ffe8d636d">getEarthRadius</a> (const double theta) const</td></tr>
+<tr class="memdesc:ae316217c1dd7b11b3cc1803ffe8d636d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get radius (in km) of WGS84 ellipsoid at a given theta (from North Pole)  <a href="#ae316217c1dd7b11b3cc1803ffe8d636d">More...</a><br /></td></tr>
+<tr class="separator:ae316217c1dd7b11b3cc1803ffe8d636d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a203ddd8fb38e86b513029067f43c6a29"><td class="memItemLeft" align="right" valign="top"><a id="a203ddd8fb38e86b513029067f43c6a29"></a>
+double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classanita_1_1Continent.html#a203ddd8fb38e86b513029067f43c6a29">getEarthRadiusLat</a> (const double lat) const</td></tr>
+<tr class="memdesc:a203ddd8fb38e86b513029067f43c6a29"><td class="mdescLeft">&#160;</td><td class="mdescRight">Uses getEarthRadius to compute radius (in km) of WGS84 ellipsoid at a given latitude. <br /></td></tr>
+<tr class="separator:a203ddd8fb38e86b513029067f43c6a29"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock">
-<p class="definition">Definition at line <a class="el" href="Continent_8hpp_source.html#l00019">19</a> of file <a class="el" href="Continent_8hpp_source.html">Continent.hpp</a>.</p>
+<div class="textblock"><p>Represents the continent of Antarctica and all Earth-related values. </p>
+<p>This class wraps all available low level information (such as BEDMAP, PREM, etc.) and provides uniform methods to access such information. This is the only class that should be used to access Earth-related information.</p>
+<p>Unless otherwise stated, distance units are in km, density is <img class="formulaInl" alt="$g/cm^{3}$" src="form_0.png"/> and angles are in radians with theta measured from the North Pole, and phi azimuthally from the prime meridian (i.e. phi == lon) </p>
+
+<p class="definition">Definition at line <a class="el" href="Continent_8hpp_source.html#l00050">50</a> of file <a class="el" href="Continent_8hpp_source.html">Continent.hpp</a>.</p>
 </div><h2 class="groupheader">Member Function Documentation</h2>
-<a id="a89fd8018b9cc338a5c2f9fff291639fa"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a89fd8018b9cc338a5c2f9fff291639fa">&#9670;&nbsp;</a></span>getEarthRadius()</h2>
+<a id="ae316217c1dd7b11b3cc1803ffe8d636d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae316217c1dd7b11b3cc1803ffe8d636d">&#9670;&nbsp;</a></span>getEarthRadius()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -127,18 +154,18 @@ std::pair&lt; double, Material &gt;&#160;</td><td class="memItemRight" valign="b
           <td class="memname">double Continent::getEarthRadius </td>
           <td>(</td>
           <td class="paramtype">const double&#160;</td>
-          <td class="paramname"><em>lat</em></td><td>)</td>
+          <td class="paramname"><em>theta</em></td><td>)</td>
           <td> const</td>
         </tr>
       </table>
 </div><div class="memdoc">
 
-<p>Get radius (in km) of WGS84 ellipsoid at a given latitude. </p>
+<p>Get radius (in km) of WGS84 ellipsoid at a given theta (from North Pole) </p>
 <p>Compute value of WGS84 ellipsoid at a given theta.</p>
-<p>Assuming that the Earth is a perfect ellipsoid, use the WGS84 major and minor radii to compute the WGS84 ellipsoid radius at a given latitude</p>
-<p>Uses $R = {ab}{sqrt{a^2 ^2() + b^2 ^2()}}$ with a given by WGS84 and b = (1 - f)*a with f given by WGS84 </p>
+<p>Assuming that the Earth is a perfect ellipsoid, use the WGS84 major and minor radii to compute the WGS84 ellipsoid radius at a given thetaitude</p>
+<p>Uses <img class="formulaInl" alt="$R = \frac{ab}{\sqrt{a^2 \sin^2(\theta) + b^2 \cos^2(\theta)}}$" src="form_2.png"/> with <img class="formulaInl" alt="$a$" src="form_3.png"/> given by WGS84 and <img class="formulaInl" alt="$b = (1 - f)a$" src="form_5.png"/> with <img class="formulaInl" alt="$f$" src="form_6.png"/> given by WGS84 </p>
 
-<p class="definition">Definition at line <a class="el" href="Continent_8cpp_source.html#l00052">52</a> of file <a class="el" href="Continent_8cpp_source.html">Continent.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Continent_8cpp_source.html#l00062">62</a> of file <a class="el" href="Continent_8cpp_source.html">Continent.cpp</a>.</p>
 
 </div>
 </div>

@@ -68,62 +68,71 @@ $(function() {
 <div class="header">
   <div class="summary">
 <a href="#pub-methods">Public Member Functions</a> &#124;
-<a href="#pub-attribs">Public Attributes</a> &#124;
 <a href="classanita_1_1Particle-members.html">List of all members</a>  </div>
   <div class="headertitle">
-<div class="title">anita::Particle Class Reference</div>  </div>
+<div class="title">anita::Particle Class Reference<span class="mlabels"><span class="mlabel">abstract</span></span></div>  </div>
 </div><!--header-->
 <div class="contents">
+
+<p>Abstract class representing a general particle - neutrino or lepton.  
+ <a href="classanita_1_1Particle.html#details">More...</a></p>
+
+<p><code>#include &lt;<a class="el" href="Particle_8hpp_source.html">Particle.hpp</a>&gt;</code></p>
 <div class="dynheader">
 Inheritance diagram for anita::Particle:</div>
 <div class="dyncontent">
  <div class="center">
   <img src="classanita_1_1Particle.png" usemap="#anita::Particle_map" alt=""/>
   <map id="anita::Particle_map" name="anita::Particle_map">
-<area href="classanita_1_1Lepton.html" alt="anita::Lepton" shape="rect" coords="150,56,290,80"/>
-<area href="classanita_1_1Neutrino.html" alt="anita::Neutrino" shape="rect" coords="600,56,740,80"/>
-<area href="classanita_1_1Electron.html" alt="anita::Electron" shape="rect" coords="0,112,140,136"/>
-<area href="classanita_1_1Muon.html" alt="anita::Muon" shape="rect" coords="150,112,290,136"/>
-<area href="classanita_1_1Tau.html" alt="anita::Tau" shape="rect" coords="300,112,440,136"/>
-<area href="classanita_1_1ElectronNeutrino.html" alt="anita::ElectronNeutrino" shape="rect" coords="450,112,590,136"/>
-<area href="classanita_1_1MuonNeutrino.html" alt="anita::MuonNeutrino" shape="rect" coords="600,112,740,136"/>
-<area href="classanita_1_1TauNeutrino.html" alt="anita::TauNeutrino" shape="rect" coords="750,112,890,136"/>
+<area href="classanita_1_1Lepton.html" title="An abstract class representing a general lepton. " alt="anita::Lepton" shape="rect" coords="150,56,290,80"/>
+<area href="classanita_1_1Neutrino.html" title="Abstract class representing a neutrino. " alt="anita::Neutrino" shape="rect" coords="600,56,740,80"/>
+<area href="classanita_1_1Electron.html" title="A concrete class representing an electron. " alt="anita::Electron" shape="rect" coords="0,112,140,136"/>
+<area href="classanita_1_1Muon.html" title="A concrete class representing a muon. " alt="anita::Muon" shape="rect" coords="150,112,290,136"/>
+<area href="classanita_1_1Tau.html" title="Construct a Tau with energy E in log10(eV) units. " alt="anita::Tau" shape="rect" coords="300,112,440,136"/>
+<area href="classanita_1_1ElectronNeutrino.html" title="A concrete class representing an Electron Neutrino. " alt="anita::ElectronNeutrino" shape="rect" coords="450,112,590,136"/>
+<area href="classanita_1_1MuonNeutrino.html" title="A concrete class representing a Muon Neutrino. " alt="anita::MuonNeutrino" shape="rect" coords="600,112,740,136"/>
+<area href="classanita_1_1TauNeutrino.html" title="A concrete class representing a Tau Neutrino. " alt="anita::TauNeutrino" shape="rect" coords="750,112,890,136"/>
 </map>
  </div></div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a48e43bfa726fb937f177288310bba498"><td class="memItemLeft" align="right" valign="top"><a id="a48e43bfa726fb937f177288310bba498"></a>
-virtual double&#160;</td><td class="memItemRight" valign="bottom"><b>getCrossSection</b> (const Current current) const</td></tr>
-<tr class="separator:a48e43bfa726fb937f177288310bba498"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a2f3048c3f4142162a8185fe5edcb3036"><td class="memItemLeft" align="right" valign="top"><a id="a2f3048c3f4142162a8185fe5edcb3036"></a>
-virtual double&#160;</td><td class="memItemRight" valign="bottom"><b>getYFactor</b> (const Current current) const</td></tr>
-<tr class="separator:a2f3048c3f4142162a8185fe5edcb3036"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a980cb1e8af5322534544f1e1f6d541d8"><td class="memItemLeft" align="right" valign="top"><a id="a980cb1e8af5322534544f1e1f6d541d8"></a>
-std::pair&lt; double, Current &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>getInteractionLength</b> (const double density) const</td></tr>
-<tr class="separator:a980cb1e8af5322534544f1e1f6d541d8"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a304a5a69e41e58be9d6fd475ec16d98c"><td class="memItemLeft" align="right" valign="top"><a id="a304a5a69e41e58be9d6fd475ec16d98c"></a>
-virtual <a class="el" href="classanita_1_1Particle.html">Particle</a>&#160;</td><td class="memItemRight" valign="bottom"><b>getInteractionProducts</b> (const Current current) const</td></tr>
-<tr class="separator:a304a5a69e41e58be9d6fd475ec16d98c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a2786e5c915c70c6d81c4802850911a63"><td class="memItemLeft" align="right" valign="top"><a id="a2786e5c915c70c6d81c4802850911a63"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><b>Particle</b> (double E)</td></tr>
-<tr class="separator:a2786e5c915c70c6d81c4802850911a63"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-attribs"></a>
-Public Attributes</h2></td></tr>
-<tr class="memitem:ac4932849e014c408d466bbda94a26286"><td class="memItemLeft" align="right" valign="top"><a id="ac4932849e014c408d466bbda94a26286"></a>
-double&#160;</td><td class="memItemRight" valign="bottom"><b>energy</b></td></tr>
-<tr class="separator:ac4932849e014c408d466bbda94a26286"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6f8ab36fcc4cb0e6ca4e9615965569c7"><td class="memItemLeft" align="right" valign="top"><a id="a6f8ab36fcc4cb0e6ca4e9615965569c7"></a>
-bool&#160;</td><td class="memItemRight" valign="bottom"><b>isLepton</b></td></tr>
-<tr class="separator:a6f8ab36fcc4cb0e6ca4e9615965569c7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad2f3d841b9c9a250e3dac1987b8552e8"><td class="memItemLeft" align="right" valign="top"><a id="ad2f3d841b9c9a250e3dac1987b8552e8"></a>
+double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classanita_1_1Particle.html#ad2f3d841b9c9a250e3dac1987b8552e8">getEnergy</a> () const</td></tr>
+<tr class="memdesc:ad2f3d841b9c9a250e3dac1987b8552e8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the energy of the particle in log10(eV) units. <br /></td></tr>
+<tr class="separator:ad2f3d841b9c9a250e3dac1987b8552e8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afc78f3532abf99b904bc9f3ea7a92fb7"><td class="memItemLeft" align="right" valign="top"><a id="afc78f3532abf99b904bc9f3ea7a92fb7"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classanita_1_1Particle.html#afc78f3532abf99b904bc9f3ea7a92fb7">setEnergy</a> (const double E)</td></tr>
+<tr class="memdesc:afc78f3532abf99b904bc9f3ea7a92fb7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set the energy of the particle in log10(eV) units. <br /></td></tr>
+<tr class="separator:afc78f3532abf99b904bc9f3ea7a92fb7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7047ddc40b913e4f9b780cac53e19e5b"><td class="memItemLeft" align="right" valign="top"><a id="a7047ddc40b913e4f9b780cac53e19e5b"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classanita_1_1Particle.html#a7047ddc40b913e4f9b780cac53e19e5b">isNeutrino</a> ()</td></tr>
+<tr class="memdesc:a7047ddc40b913e4f9b780cac53e19e5b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Flag indicating whether particle is neutrino. <br /></td></tr>
+<tr class="separator:a7047ddc40b913e4f9b780cac53e19e5b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a53e158aa111b166e767fdfffe79e0c41"><td class="memItemLeft" align="right" valign="top"><a id="a53e158aa111b166e767fdfffe79e0c41"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classanita_1_1Particle.html#a53e158aa111b166e767fdfffe79e0c41">isLepton</a> ()</td></tr>
+<tr class="memdesc:a53e158aa111b166e767fdfffe79e0c41"><td class="mdescLeft">&#160;</td><td class="mdescRight">Flag indicating whether particle is neutrino. <br /></td></tr>
+<tr class="separator:a53e158aa111b166e767fdfffe79e0c41"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5cbad91003071f6b53cd0ad4f4b9d367"><td class="memItemLeft" align="right" valign="top"><a id="a5cbad91003071f6b53cd0ad4f4b9d367"></a>
+virtual double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classanita_1_1Particle.html#a5cbad91003071f6b53cd0ad4f4b9d367">getEnergyLoss</a> () const =0</td></tr>
+<tr class="memdesc:a5cbad91003071f6b53cd0ad4f4b9d367"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the energy loss, dE/dX of the particle in GeV cm^2/g. <br /></td></tr>
+<tr class="separator:a5cbad91003071f6b53cd0ad4f4b9d367"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6eb9d566690cc867f1f499b9a7034724"><td class="memItemLeft" align="right" valign="top"><a id="a6eb9d566690cc867f1f499b9a7034724"></a>
+virtual std::pair&lt; double, InteractionType &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classanita_1_1Particle.html#a6eb9d566690cc867f1f499b9a7034724">getInteractionLength</a> (const double density) const =0</td></tr>
+<tr class="memdesc:a6eb9d566690cc867f1f499b9a7034724"><td class="mdescLeft">&#160;</td><td class="mdescRight">Compute the interaction length at a density in g/cm^3 and return the interaction type. <br /></td></tr>
+<tr class="separator:a6eb9d566690cc867f1f499b9a7034724"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abd132c141076eca6bbebe384be3036b6"><td class="memItemLeft" align="right" valign="top"><a id="abd132c141076eca6bbebe384be3036b6"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classanita_1_1Particle.html#abd132c141076eca6bbebe384be3036b6">Particle</a> (const double E, const bool _neutrino)</td></tr>
+<tr class="memdesc:abd132c141076eca6bbebe384be3036b6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Construct a new <a class="el" href="classanita_1_1Particle.html" title="Abstract class representing a general particle - neutrino or lepton. ">Particle</a> with an energy given in log10(eV) <br /></td></tr>
+<tr class="separator:abd132c141076eca6bbebe384be3036b6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock">
-<p class="definition">Definition at line <a class="el" href="Particle_8hpp_source.html#l00023">23</a> of file <a class="el" href="Particle_8hpp_source.html">Particle.hpp</a>.</p>
-</div><hr/>The documentation for this class was generated from the following files:<ul>
+<div class="textblock"><p>Abstract class representing a general particle - neutrino or lepton. </p>
+<p>This abstract class contains the information shared between the neutrino and lepton base classes. Any method or function that can accept neutrinos or leptons should use <a class="el" href="classanita_1_1Particle.html" title="Abstract class representing a general particle - neutrino or lepton. ">Particle</a>&amp; or Particle* as the argument type, but if you wish to restrict behaviour to neutrinos or leptons, please use their respective subclasses. </p>
+
+<p class="definition">Definition at line <a class="el" href="Particle_8hpp_source.html#l00044">44</a> of file <a class="el" href="Particle_8hpp_source.html">Particle.hpp</a>.</p>
+</div><hr/>The documentation for this class was generated from the following file:<ul>
 <li>include/<a class="el" href="Particle_8hpp_source.html">Particle.hpp</a></li>
-<li>src/<a class="el" href="Particle_8cpp_source.html">Particle.cpp</a></li>
 </ul>
 </div><!-- contents -->
 <!-- start footer part -->

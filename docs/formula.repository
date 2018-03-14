@@ -1,0 +1,7 @@
+\form#0:$g/cm^{3}$
+\form#1:$R = \frac{ab}{sqrt{a^2 \sin^2(\theta) + b^2 \cos^2(\theta)}}$
+\form#2:$R = \frac{ab}{\sqrt{a^2 \sin^2(\theta) + b^2 \cos^2(\theta)}}$
+\form#3:$a$
+\form#4:$b = (1 - f)*a$
+\form#5:$b = (1 - f)a$
+\form#6:$f$
