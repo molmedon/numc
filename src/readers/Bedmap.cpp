@@ -77,11 +77,15 @@ float* Bedmap::readBedmapData(std::string filename) const {
 }
 
 
-std::pair<double, double> Bedmap::coordToBEDMAPLocation(const double lat, const double lon) const {
+std::pair<double, double> Bedmap::coordToBEDMAPLocation(const double theta, const double phi) const {
     // Uses "Map Projections - A Working Manual" by J.P Snyder" https://pubs.usgs.gov/pp/1395/report.pdf
     // Stereographic Projections - starting pg. 154. Numerical example on pg. 315
     // All page and equation numbers refer to Snyder
     // IceMC version is icemodel.cc:L1122
+
+    // convert (theta, phi) to (latitude, longitude)
+    const double lat = (PI/2.) - theta;
+    const double lon = phi;
 
     // Pg. 161, Eq. 15-9
     const double t = tan(PI/4 + lat/2)/pow( (1 - EARTH_E*sin(-lat))/(1 + EARTH_E*sin(-lat)), EARTH_E/2.);
@@ -97,7 +101,7 @@ std::pair<double, double> Bedmap::coordToBEDMAPLocation(const double lat, const 
 
     // quick check to make sure that we are within the bedmap zone
     if ((x < this->xllcorner) || (x > -this->xllcorner) || (y < this->yllcorner) || (y > -this->yllcorner)) {
-        std::cerr << "Converting (" << lat << ", " << lon << ") to BEDMAP coordinates "
+        std::cerr << "Converting (" << lat << ", " << phi << ") to BEDMAP coordinates "
                   << "gives out-of-range values (" << x << ", " << y << "). Quitting..." << std::endl;
         throw std::exception();
     }
@@ -108,11 +112,11 @@ std::pair<double, double> Bedmap::coordToBEDMAPLocation(const double lat, const 
 }
 
 
-// get the surface ice elevation/radius (in m) relative to WGS84 ellipsoid at a given lat/lon (radians)
-double Bedmap::getSurfaceElevation(const double lat, const double lon) const {
+// get the surface ice elevation/radius (in m) relative to WGS84 ellipsoid at a given lat/phi (radians)
+double Bedmap::getSurfaceElevation(const double theta, const double phi) const {
 
     // get the floating point location in the grid (in km)
-    std::pair<double, double> loc = coordToBEDMAPLocation(lat, lon);
+    std::pair<double, double> loc = coordToBEDMAPLocation(theta, phi);
 
     // return the bedmap surface elevation at the x,y point
     return this->getSurfaceElevationAtPoint(loc.first, loc.second);
@@ -129,11 +133,11 @@ double Bedmap::getSurfaceElevationAtPoint(const double x, const double y) const 
 }
 
 
-// get the thickness of the ice (in m) at a given lat/lon (radians)
-double Bedmap::getIceThickness(const double lat, const double lon) const {
+// get the thickness of the ice (in m) at a given lat/phi (radians)
+double Bedmap::getIceThickness(const double theta, const double phi) const {
 
     // get the floating point location in the grid (in km)
-    std::pair<double, double> loc = coordToBEDMAPLocation(lat, lon);
+    std::pair<double, double> loc = coordToBEDMAPLocation(theta, phi);
 
     // return the bedmap ice elevation at the x,y point
     return this->getIceThicknessAtPoint(loc.first, loc.second);
@@ -148,18 +152,18 @@ double Bedmap::getIceThicknessAtPoint(const double x, const double y) const {
 }
 
 
-// get the radius of the rock/ice boundary (in m) at a given lat/lon (radians)
-double Bedmap::getBedDepth(const double lat, const double lon) const {
+// get the radius of the rock/ice boundary (in m) at a given lat/phi (radians)
+double Bedmap::getBedDepth(const double theta, const double phi) const {
 
     // get the floating point location in the grid (in km)
-    std::pair<double, double> loc = coordToBEDMAPLocation(lat, lon);
+    std::pair<double, double> loc = coordToBEDMAPLocation(theta, phi);
 
     // return the bedmap ice elevation at the x,y point
     return this->getBedDepthAtPoint(loc.first, loc.second);
 
 }
 
-// get the radius of the rock/ice boundary (in m) at a given lat/lon (radians)
+// get the radius of the rock/ice boundary (in m) at a given lat/phi (radians)
 double Bedmap::getBedDepthAtPoint(const double x, const double y) const {
 
     // bilinear interpolate data (returns EIGEN-GL04C) and then add conversion to WGS84
@@ -167,19 +171,19 @@ double Bedmap::getBedDepthAtPoint(const double x, const double y) const {
 }
 
 
-// \brief Query BEDMAP2 icemask at a given lat,lon to identify valid data
+// \brief Query BEDMAP2 icemask at a given theta,phi to identify valid data
 // 0 = grounded, 1 = ice shelf, 127 = ocean
-IceMask Bedmap::getIceMask(const double lat, const double lon) const {
+IceMask Bedmap::getIceMask(const double theta, const double phi) const {
 
     // get the floating point location in the grid (in km)
-    std::pair<double, double> loc = coordToBEDMAPLocation(lat, lon);
+    std::pair<double, double> loc = coordToBEDMAPLocation(theta, phi);
 
     // and return the ice mask at this point
     return this->getIceMaskAtPoint(loc.first, loc.second);
 }
 
 
-// \brief Query BEDMAP2 icemask at a given lat,lon to identify valid data
+// \brief Query BEDMAP2 icemask at a given theta,phi to identify valid data
 // 0 = grounded, 1 = ice shelf, 127 = ocean
 IceMask Bedmap::getIceMaskAtPoint(const double x, const double y) const {
 

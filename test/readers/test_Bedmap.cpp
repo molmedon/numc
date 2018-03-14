@@ -7,6 +7,8 @@
 
 TEST_SUITE_BEGIN("bedmap");
 
+using anita::PI;
+
 // Checks whether we can create a Bedmap object and load data files without errors
 TEST_CASE("CREATE BEDMAP") {
     // create a new Bedmap object
@@ -20,20 +22,22 @@ TEST_CASE("BASIC BEDMAP QUERIES") {
     anita::readers::Bedmap bedmap = anita::readers::Bedmap();
 
     // peform a basic check with a fixed point. Use lat=-75, and lon=150 as this is the example in Snyder, Pg. 315
+    // NOTE: our bedmap utils take spherical coordinates with theta=0 at the north pole.
+    // Test cases are provided in latitude which must be converted by subtracting from PI/2
     // Test values were computed using Matlab's Antarctic Mapping Toolbox with the Bedmap2 Toolbox
-    CHECK(bedmap.getSurfaceElevation(anita::degToRad(-75), anita::degToRad(150)) == doctest::Approx(2345.4).epsilon(0.005));
-    CHECK(bedmap.getIceThickness(anita::degToRad(-75), anita::degToRad(150)) == doctest::Approx(2731.7).epsilon(0.005));
-    CHECK(bedmap.getBedDepth(anita::degToRad(-75), anita::degToRad(150)) == doctest::Approx(-386.2751).epsilon(0.05)); // why does this one disagree so much? 5% error ~ 20m
-    CHECK(bedmap.getIceMask(anita::degToRad(-75), anita::degToRad(150)) == anita::readers::IceMask::Grounded);
+    CHECK(bedmap.getSurfaceElevation((PI/2.) - anita::degToRad(-75), anita::degToRad(150)) == doctest::Approx(2345.4).epsilon(0.005));
+    CHECK(bedmap.getIceThickness((PI/2.) - anita::degToRad(-75), anita::degToRad(150)) == doctest::Approx(2731.7).epsilon(0.005));
+    CHECK(bedmap.getBedDepth((PI/2.) - anita::degToRad(-75), anita::degToRad(150)) == doctest::Approx(-386.2751).epsilon(0.05)); // why does this one disagree so much? 5% error ~ 20m
+    CHECK(bedmap.getIceMask((PI/2.) - anita::degToRad(-75), anita::degToRad(150)) == anita::readers::IceMask::Grounded);
 
     // check that we don't have ice thickness at the edge of the map (-60 degrees S)
-    CHECK(std::isnan(bedmap.getIceThickness(anita::degToRad(-60), 0)) == true);
+    CHECK(std::isnan(bedmap.getIceThickness((PI/2.) - anita::degToRad(-60), 0)) == true);
 
     // check that we have valid data for everything at the pole
-    CHECK(std::isnan(bedmap.getIceThickness(anita::degToRad(-90), 0)) == false);
-    CHECK(std::isnan(bedmap.getSurfaceElevation(anita::degToRad(-90), 0)) == false);
-    CHECK(std::isnan(bedmap.getBedDepth(anita::degToRad(-90), 0)) == false);
-    CHECK(std::isnan(static_cast<int>(bedmap.getIceMask(anita::degToRad(-90), 0))) == false);
+    CHECK(std::isnan(bedmap.getIceThickness((PI/2.) - anita::degToRad(-90), 0)) == false);
+    CHECK(std::isnan(bedmap.getSurfaceElevation((PI/2.) - anita::degToRad(-90), 0)) == false);
+    CHECK(std::isnan(bedmap.getBedDepth((PI/2.) - anita::degToRad(-90), 0)) == false);
+    CHECK(std::isnan(static_cast<int>(bedmap.getIceMask((PI/2.) - anita::degToRad(-90), 0))) == false);
 
     // this is a simple test case that is used to debug internal indexing issues
     // with the Bedmap methods
@@ -94,7 +98,7 @@ TEST_CASE("FULL BEDMAP TEST") {
                          lat, lon, x, y, surface, thickness, bed, beduncertainty, icemask);
 
         // we now check that the values match with our Bedmap class
-        double latr = anita::degToRad(lat);
+        double latr = (PI/2.) - anita::degToRad(lat);
         double lonr = anita::degToRad(lon);
 
         // surface is not defined everywhere, so we check if its NaN
