@@ -19,6 +19,9 @@ OBJ_DIR = obj
 TEST_DIR = test
 DATA_DIR = $(shell pwd)/data/
 
+# make sure the appropriate subdirectories for objects exists
+$(shell mkdir $(OBJ_DIR)/readers $(OBJ_DIR)/writers $(OBJ_DIR)/lib $(OBJ_DIR)/particles)
+
 # a hash of the current src/include *.cpp files
 # this is saved into all output data files to verify the code
 # that produced any particular data file
@@ -28,8 +31,8 @@ HASH = $(shell find ${SRC_DIR} ${OBJ_DIR} -type f -name "*.cpp" -exec md5sum {} 
 COMMIT = $(shell git rev-parse HEAD | head -c 8)
 
 # find all the source files
-SRC = $(wildcard $(SRC_DIR)/*.cpp) $(wildcard $(SRC_DIR)/readers/*.cpp)
-TEST_SRC = $(wildcard $(TEST_DIR)/*.cpp) $(wildcard $(TEST_DIR)/readers/*.cpp)
+SRC = $(wildcard $(SRC_DIR)/*.cpp) $(wildcard $(SRC_DIR)/*/*.cpp)
+TEST_SRC = $(wildcard $(TEST_DIR)/*.cpp) $(wildcard $(TEST_DIR)/*/*.cpp)
 
 # and make the appropriate object files
 OBJ = $(SRC:$(SRC_DIR)/%.cpp=$(OBJ_DIR)/%.o)
