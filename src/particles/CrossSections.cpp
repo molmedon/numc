@@ -12,7 +12,7 @@ double anita::getChargedCurrentCrossSection(const double E, const CrossSectionMo
     // https://github.com/harmscho/NuTauSim/
     // starting L626:simu_elost.cxx
 
-    // we create a lambda expression with wrap E in a closure
+    // we create a lambda expression and wrap E in a closure
     // so that we only need to provide the coefficients
     auto Evaluate = [E](double coeff[4]) -> double {
         // this stores the final cross section value

@@ -1,69 +1,139 @@
 #pragma once
 
+#include <Particle.hpp>
+
 namespace anita {
 
-
-    // General lepton; use Lepton& for function arguments
-    // that should only take leptons
+    ///
+    /// \brief An abstract class representing a general lepton.
+    ///
+    /// Classes that wish to take only leptons as arguments should use Lepton& or Lepton* as argument type.
+    ///
     class Lepton : public Particle {
 
-        // easy check if we are a lepton
-        bool isLepton = true;
+        ///
+        /// \brief The flavor of the lepton - Electron, Muon, Tau
+        ///
+        Flavor flavor;
 
     public:
-        Lepton(double E) : Particle(E) {};
+        ///
+        /// \brief Construct a lepton of given energy `E` (in log10(eV) units) and flavor `flv`
+        ///
+        Lepton(double E, Flavor flv) : Particle(E, false), flavor(flv) {};
 
-        // get the primary particle resulting from an interaction of a certain kind
-        Particle getInteractionProducts(const Current current) const;
+        ///
+        /// \brief Compute the interaction length at a density in g/cm^3 and return the interaction type
+        ///
+        virtual std::pair<double, InteractionType> getInteractionLength(const double density) const override = 0;
+
+        ///
+        /// \brief Return the primary particle from a lepton interaction
+        ///
+        virtual std::unique_ptr<Particle> getInteractionProducts(const InteractionType interaction) const = 0;
 
     private:
 
     };
 
-    // represents an electron and stores associated data files
+
+    ///
+    /// \brief A concrete class representing an electron
+    ///
     class Electron : public Lepton {
 
-        // map from energy in log10(eV) units to crossSection in XXX
-        // shared by all instances of Electron
-        static std::map<double, double> crossSection;
-
     public:
 
-        Electron(double E) : Lepton(E) {};
+        ///
+        /// \brief Construct an Electron with energy `E` in log10(eV) units
+        ///
+        Electron(double E) : Lepton(E, Flavor::Electron) {};
+
+        ///
+        /// \brief Get the energy loss, dE/dX, in GeV cm^2/g
+        ///
+        double getEnergyLoss() const override { return 0; };
+
+        ///
+        /// \brief Compute the interaction length at a density in g/cm^3 and return the interaction length/type
+        ///
+        std::pair<double, InteractionType> getInteractionLength(const double density) const override;
+
+        ///
+        /// \brief Return the primary particle from a lepton interaction
+        ///
+        std::unique_ptr<Particle> getInteractionProducts(const InteractionType interaction) const override;
     private:
 
     };
 
-    // represents a muon and stores associated data files
+
+    ///
+    /// \brief A concrete class representing a muon
+    ///
     class Muon : public Lepton {
 
-        // map from energy in log10(eV) units to crossSection in XXX
-        // shared by all instances of Muon
-        static std::map<double, double> crossSection;
-
     public:
 
-        Muon(double E) : Lepton(E) {};
+        ///
+        /// \brief Construct a Muon with energy `E` in log10(eV) units
+        ///
+        Muon(double E) : Lepton(E, Flavor::Muon) {};
+
+        ///
+        /// \brief Get the energy loss, dE/dX, in GeV cm^2/g
+        ///
+        double getEnergyLoss() const override { return 0; };
+
+        ///
+        /// \brief Compute the interaction length at a density in g/cm^3 and return the interaction length/type
+        ///
+        std::pair<double, InteractionType> getInteractionLength(const double density) const override;
+
+        ///
+        /// \brief Return the primary particle from a lepton interaction
+        ///
+        std::unique_ptr<Particle> getInteractionProducts(const InteractionType interaction) const override;
+
     private:
 
     };
 
-    // represents tau lepton and stores associated data files
+
+    ///
+    /// \brief Construct a Tau with energy `E` in log10(eV) units
+    ///
     class Tau : public Lepton {
 
-        // map from energy in log10(eV) units to crossSection in XXX
-        // shared by all instances of Tau
-        static std::map<double, double> crossSection;
 
     public:
+
+        ///
+        /// \brief Construct a Tau with energy `E` in log10(eV) units
+        ///
+        Tau(double E) : Lepton(E, Flavor::Tau) {};
+
+        ///
+        /// \brief Get the energy loss, dE/dX, in GeV cm^2/g
+        ///
+        double getEnergyLoss() const override { return 0; };
+
+        ///
+        /// \brief Compute the interaction length at a density in g/cm^3 and return the interaction length/type
+        ///
+        std::pair<double, InteractionType> getInteractionLength(const double density) const override;
+
+        ///
+        /// \brief Return the primary particle from a lepton interaction
+        ///
+        std::unique_ptr<Particle> getInteractionProducts(const InteractionType interaction) const override;
+
+    private:
 
         // tau decay products data table
         static const readers::YTable decayTable() {
             return readers::YTable(std::string(DATA_DIR)+std::string("/tau_decay_tauola.data"));
         };
-
-        Tau(double E) : Lepton(E) {};
-    private:
 
     };
 
