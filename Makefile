@@ -20,7 +20,7 @@ TEST_DIR = test
 DATA_DIR = $(shell pwd)/data/
 
 # make sure the appropriate subdirectories for objects exists
-$(shell mkdir $(OBJ_DIR)/readers $(OBJ_DIR)/writers $(OBJ_DIR)/lib $(OBJ_DIR)/particles)
+$(shell mkdir -p $(OBJ_DIR)/readers $(OBJ_DIR)/writers $(OBJ_DIR)/lib $(OBJ_DIR)/particles)
 
 # a hash of the current src/include *.cpp files
 # this is saved into all output data files to verify the code
