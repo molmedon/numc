@@ -43,6 +43,9 @@ Flux::Flux(const std::string filename) : spline(new ROOT::Math::Interpolator(0, 
 
     }
 
+    // and close the file
+    influx.close();
+
     // maps are guaranteed to be presorted
     //so the min and max energy is just the first and last element
     this->min_energy = this->flux.begin()->first;
