@@ -35,7 +35,7 @@ namespace anita { namespace readers {
         /// \brief A class providing read utilities for accessing Bedmap2 data
         ///
         /// Bedmap() objects load the required Bedmap2 data files on initialization
-        /// and provide utilities to access Bedmap2 data at a given (lat, lon)
+        /// and provide utilities to access Bedmap2 data at a given (theta, phi)
         ///
         class Bedmap {
 
@@ -55,34 +55,34 @@ namespace anita { namespace readers {
             ~Bedmap();
 
             ///
-            /// \brief Get the surface elevation of ice (in m) relative to the WGS84 ellipsoid at a given (lat, lon)
+            /// \brief Get the surface elevation of ice (in m) relative to the WGS84 ellipsoid at a given (theta, phi)
             ///
             /// Use the BEDMAP2 surface_elevation data to compute the elevation of the ice surface relative
-            /// to the WGS84 ellipsoid at a given latitude and longitude. This is only valid where
-            /// the BEDMAP2 icemask is non-zero. Always check the icemask at lat/lon before calling this
+            /// to the WGS84 ellipsoid at a given theta, phi. This is only valid where
+            /// the BEDMAP2 icemask is non-zero. Always check the icemask at (theta,phi) before calling this
             /// function. This returns NaN outside where the icemask is zero.
             ///
-            double getSurfaceElevation(const double lat, const double lon) const;
+            double getSurfaceElevation(const double theta, const double phi) const;
 
             ///
             /// \brief Get surface elevation relative to the WGS84 ellipsoid (in m) at (x, y) (km) in Bedmap coordinates
             ///
             /// Use the BEDMAP2 surface_elevation data to compute the elevation of the ice surface (in m) relative
             /// to the WGS84 ellipsoid at a given x and y in polar stereographic coordrinates. This is only
-            /// valid where the BEDMAP2 icemask is non-zero. Always check the icemask at lat/lon before calling
+            /// valid where the BEDMAP2 icemask is non-zero. Always check the icemask at theta/phi before calling
             /// this function. This returns NaN outside where the icemask is zero.
             ///
             double getSurfaceElevationAtPoint(const double x, const double y) const;
 
             ///
-            /// \brief Get the thickness of ice (in m) at a (lat, lon) in radians
+            /// \brief Get the thickness of ice (in m) at a (theta, phi) in radians
             ///
             /// Use the BEDMAP2 thickness data to compute the thickness of the ice (in m) at
-            /// a given latitude and longitude. This is only
-            /// valid where the BEDMAP2 icemask is non-zero. Always check the icemask at lat/lon before calling
+            /// a given (theta, phi) (where theta is relative to North Pole). This is only
+            /// valid where the BEDMAP2 icemask is non-zero. Always check the icemask at theta/phi before calling
             /// this function. This returns NaN outside where the icemask is zero.
             ///
-            double getIceThickness(const double lat, const double lon) const;
+            double getIceThickness(const double theta, const double phi) const;
 
             ///
             /// \brief Get ice thickness (in m) at (x, y) (km) location in Bedmap coordinates
@@ -90,18 +90,18 @@ namespace anita { namespace readers {
             ///
             /// Use the BEDMAP2 thickness data to compute the thickness of the ice (in m) at
             /// a given x and y in polar stereographic coordrinates. This is only
-            /// valid where the BEDMAP2 icemask is non-zero. Always check the icemask at lat/lon before calling
+            /// valid where the BEDMAP2 icemask is non-zero. Always check the icemask at lat/phi before calling
             /// this function. This returns NaN outside where the icemask is zero.
             ///
             double getIceThicknessAtPoint(const double x, const double y) const;
 
             ///
-            /// \brief Get depth of rock bed (in km) at (lat,lon) in radians relative to WGS84 ellipsoid
+            /// \brief Get depth of rock bed (in km) at (theta,phi) in radians relative to WGS84 ellipsoid
             ///
             /// Use the BEDMAP2 depth data to compute the depth of the rock bed (in m)
             /// relative to the WGS84 ellipsoid at a given latitude and longitude
             ///
-            double getBedDepth(const double lat, const double lon) const;
+            double getBedDepth(const double theta, const double phi) const;
 
             ///
             /// \brief Get depth of rock bed (in km) at (x, y) (km) in Bedmap coordinatese relative to WGS84 ellipsoid
@@ -112,9 +112,9 @@ namespace anita { namespace readers {
             double getBedDepthAtPoint(const double x, const double y) const;
 
             ///
-            /// \brief Query BEDMAP2 icemask at a given lat,lon to identify valid data
+            /// \brief Query BEDMAP2 icemask at a given theta,phi to identify valid data
             ///
-            /// Query the BEDMAP2 icemask at a given latitude and longitude to determine
+            /// Query the BEDMAP2 icemask at a given (theta, phi) to determine
             /// the existence of an ice shelf at the index. This function is conservative
             /// and will return ocean if at least one point on the interpolated square is
             /// ocean, and will return grounded if at least one point on the interpolated
@@ -122,12 +122,12 @@ namespace anita { namespace readers {
             ///
             /// 0 = grounded, 1 = ice shelf, 127 = ocean
             ///
-            IceMask getIceMask(const double lat, const double lon) const;
+            IceMask getIceMask(const double theta, const double phi) const;
 
             ///
-            /// \brief Query BEDMAP2 icemask at a given lat,lon to identify valid data
+            /// \brief Query BEDMAP2 icemask at a given (theta, phi) to identify valid data
             ///
-            /// Query the BEDMAP2 icemask at a given latitude and longitude to determine
+            /// Query the BEDMAP2 icemask at a given (theta, phi) to determine
             /// the existence of an ice shelf at the index. This function is conservative
             /// and will return ocean if at least one point on the interpolated square is
             /// ocean, and will return grounded if at least one point on the interpolated
@@ -176,13 +176,13 @@ namespace anita { namespace readers {
             const float *gl04c_to_wgs;
 
             ///
-            /// \brief Convert (lat, lon) in radians to indices into BEDMAP2 data
+            /// \brief Convert (theta, phi) in radians to indices into BEDMAP2 data
             ///
-            /// Converts a lat, lon location on the surface of the Earth to a (x, y)
-            /// point (in km) reference to the center of the BEDMAP2 grid (lat: 0N, lon: 0E).
+            /// Converts a theta, phi location on the surface of the Earth to a (x, y)
+            /// point (in km) reference to the center of the BEDMAP2 grid (theta: 0N, phi: 0E).
             /// Does not round to allow for later interpolation between grid cells
             ///
-            inline std::pair<double, double> coordToBEDMAPLocation(const double lat, const double lon) const __attribute__((hot));
+            inline std::pair<double, double> coordToBEDMAPLocation(const double theta, const double phi) const __attribute__((hot));
 
             ///
             /// \brief Access value in `data` at x,y locations (in km) using bilinear interpolation
@@ -206,7 +206,9 @@ namespace anita { namespace readers {
             inline double interpIndex2D(const std::tuple<double, double, double, double> f,
                                         const std::pair<double, double> pos) const __attribute__((hot));
 
-            // read a Bedmap data file into memory
+            ///
+            /// \brief Read a binary bedmap file located at `filename` and return a heap-allocated array
+            ///
             float* readBedmapData(std::string filename) const;
 
         };

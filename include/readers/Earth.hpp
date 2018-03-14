@@ -36,11 +36,6 @@ namespace anita { namespace readers {
             const double max_radius = 6371;
 
             ///
-            /// \brief The number of entries in this PREM model
-            ///
-            const int max_rindex = 199;
-
-            ///
             /// \brief Construct a model of the Earth using the PREM datafile at this->filename
             ///
             /// This function loads the specified PREM datafile, which is assumed to meet
@@ -48,16 +43,17 @@ namespace anita { namespace readers {
             /// radius,depth,density,Vpv,Vph,Vsv,Vsh,eta,Q-mu,Q-kappa
             ///
             Earth() : data(readPREMFile()) {};
-
-            ///
-            /// \brief Free initialized spline objects
-            ///
             ~Earth() {};
 
         private:
 
             // filename in data dir containing the model
             const std::string filename = "PREM_1s.csv";
+
+            ///
+            /// \brief The number of entries in this PREM model
+            ///
+            const int max_rindex = 199;
 
             // a pair of vectors - of radii and density
             const std::pair<std::vector<double>, std::vector<double>> data;

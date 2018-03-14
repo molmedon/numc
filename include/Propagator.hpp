@@ -11,10 +11,6 @@
 
 namespace anita {
 
-    // This class represents a VALID particle interaction that satisfies
-    // the following conditions:
-    //     1) Occurs within the specified 'maxdepth' below the surface of the ice
-
     ///
     /// \brief A class representing the interaction or decay of a particle at some location.
     ///
@@ -82,7 +78,7 @@ namespace anita {
         ///
         /// @param particle The Neutrino to propagate through the Earth.
         ///
-        InteractionList propagate(Neutrino particle) const;
+        InteractionList propagate(Neutrino& particle) const;
 
         ///
         /// \brief Construct a new propagator.
