@@ -1,5 +1,7 @@
 #pragma once
 
+#include <memory>
+
 #include <Particle.hpp>
 
 namespace anita {
