@@ -1,6 +1,6 @@
 #pragma once
 
-#include <vector>
+#include <array>
 #include <Constants.hpp>
 
 /// This pragma produces compile time warnings containing a certain message
