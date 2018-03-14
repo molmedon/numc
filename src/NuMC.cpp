@@ -77,7 +77,7 @@ int main(int argc, char** argv) {
 
     // create a new propagator to propagate particles through the Earth using Kotera2010
     const Propagator propagator = Propagator(continent, vm["spectrum"].as<std::string>(), // flux model
-                                             vm["energy"].as<double>(), // a fixed energy if desired, otherwise -1
+                                             vm["energy"].as<double>(), // a fixed energy if desired, otherwise 0
                                              vm["min-energy"].as<double>(), // min energy cut
                                              vm["max-energy"].as<double>()); // max energy cut
 
